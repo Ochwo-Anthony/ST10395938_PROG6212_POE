@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\LecturerClaimTest\\LecturerClaimTest.csproj": {}
+    "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\LecturerClaimTest\\LecturerClaimTest.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\LecturerClaimTest\\LecturerClaimTest.csproj": {
+    "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\LecturerClaimTest\\LecturerClaimTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\LecturerClaimTest\\LecturerClaimTest.csproj",
+        "projectUniqueName": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\LecturerClaimTest\\LecturerClaimTest.csproj",
         "projectName": "LecturerClaimTest",
-        "projectPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\LecturerClaimTest\\LecturerClaimTest.csproj",
+        "projectPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\LecturerClaimTest\\LecturerClaimTest.csproj",
         "packagesPath": "C:\\Users\\lab_services_student\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\LecturerClaimTest\\obj\\",
+        "outputPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\LecturerClaimTest\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -32,8 +32,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_POEPart2\\ST10395938_POEPart2.csproj": {
-                "projectPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_POEPart2\\ST10395938_POEPart2.csproj"
+              "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\ST10395938_POEPart2.csproj": {
+                "projectPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\ST10395938_POEPart2.csproj"
               }
             }
           }
@@ -91,14 +91,14 @@
         }
       }
     },
-    "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_POEPart2\\ST10395938_POEPart2.csproj": {
+    "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\ST10395938_POEPart2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_POEPart2\\ST10395938_POEPart2.csproj",
+        "projectUniqueName": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\ST10395938_POEPart2.csproj",
         "projectName": "ST10395938_POEPart2",
-        "projectPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_POEPart2\\ST10395938_POEPart2.csproj",
+        "projectPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\ST10395938_POEPart2.csproj",
         "packagesPath": "C:\\Users\\lab_services_student\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_POEPart2\\obj\\",
+        "outputPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -137,6 +137,10 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.10, )"
@@ -144,6 +148,10 @@
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[9.0.10, )"
             },

@@ -1,22 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ST10395938_POEPart2.Data;
 using ST10395938_POEPart2.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
 
 namespace ST10395938_POEPart2.Controllers
 {
+    [Authorize(Roles = "Lecturer,HR,Coordinator,Manager")]
     public class ClaimsController : Controller
     {
-
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _env;
+        private readonly UserManager<Users> _userManager;
 
-        public ClaimsController(ApplicationDbContext db, IWebHostEnvironment env)
+        private const int MaxMonthlyHours = 180; // example limit
+
+        public ClaimsController(ApplicationDbContext db, IWebHostEnvironment env, UserManager<Users> userManager)
         {
             _db = db;
             _env = env;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -25,10 +29,24 @@ namespace ST10395938_POEPart2.Controllers
             return View(claims);
         }
 
-
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            // Pre-fill lecturer info if logged in
+            if (User.Identity!.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    var model = new LecturerClaim
+                    {
+                        LecturerName = $"{user.FirstName} {user.LastName}",
+                        Rate = user.HourlyRate
+                    };
+                    return View(model);
+                }
+            }
+
             return View();
         }
 
@@ -36,22 +54,35 @@ namespace ST10395938_POEPart2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LecturerClaim model, IFormFile? evidence)
         {
+            // Validate lecturer is logged in
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+
+            // Pull rate from HR data
+            model.LecturerName = $"{user.FirstName} {user.LastName}";
+            model.Rate = user.HourlyRate;
+
+            // Validate hours worked
+            if (model.HoursWorked > MaxMonthlyHours)
+            {
+                ModelState.AddModelError("HoursWorked", $"Cannot submit more than {MaxMonthlyHours} hours per month.");
+                return View(model);
+            }
+
             if (!ModelState.IsValid) return View(model);
 
+            // Handle evidence file
             if (evidence != null && evidence.Length > 0)
             {
                 var ext = Path.GetExtension(evidence.FileName).ToLowerInvariant();
-
                 var allowed = new[] { ".pdf", ".docx" };
-
                 if (!allowed.Contains(ext))
                 {
-                    ModelState.AddModelError("Evidence", "Only PDF and Docx Files");
+                    ModelState.AddModelError("Evidence", "Only PDF and DOCX files are allowed.");
                     return View(model);
                 }
 
                 const long max = 5 * 1024 * 1024;
-
                 if (evidence.Length > max)
                 {
                     ModelState.AddModelError("Evidence", "File size must be less than 5 MB.");
@@ -70,21 +101,18 @@ namespace ST10395938_POEPart2.Controllers
                 model.EvidenceFile = unique;
             }
 
+            // Auto-calculate claim amount
+            model.Amount = model.HoursWorked * model.Rate;
 
             model.Status = "Pending";
-            model.PaymentStatus = "Unpaid";            
+            model.PaymentStatus = "Unpaid";
 
             _db.LecturerClaims.Add(model);
-            
             await _db.SaveChangesAsync();
 
             return RedirectToAction(nameof(MyClaims), new { lecturerName = model.LecturerName });
+        }
 
-           
-
-
-        } 
-        
         [HttpGet]
         public async Task<IActionResult> MyClaims(string? lecturerName, string? status)
         {
@@ -114,9 +142,9 @@ namespace ST10395938_POEPart2.Controllers
         {
             var row = await _db.LecturerClaims.FindAsync(id);
 
-            if(row == null) return NotFound();
-            
-            if(row.Status != "Needs Fix")
+            if (row == null) return NotFound();
+
+            if (row.Status != "Needs Fix")
             {
                 TempData["Message"] = "Only logs with status 'Needs Fix' can be edited.";
                 return RedirectToAction(nameof(MyClaims), new { lecturerName = row.LecturerName });
@@ -138,27 +166,31 @@ namespace ST10395938_POEPart2.Controllers
                 return RedirectToAction(nameof(MyClaims), new { lecturerName = row.LecturerName });
             }
 
+            // Validate max hours
+            if (input.HoursWorked > MaxMonthlyHours)
+            {
+                ModelState.AddModelError("HoursWorked", $"Cannot submit more than {MaxMonthlyHours} hours per month.");
+                return View(row);
+            }
+
             if (!ModelState.IsValid) return View(row);
 
             row.HoursWorked = input.HoursWorked;
             row.Rate = input.Rate;
             row.Note = input.Note;
+            row.Amount = row.HoursWorked * row.Rate;
 
             if (evidence != null && evidence.Length > 0)
             {
                 var ext = Path.GetExtension(evidence.FileName).ToLowerInvariant();
-
-                var allowed = new[] { ".pdf", ".docx", };
-
+                var allowed = new[] { ".pdf", ".docx" };
                 if (!allowed.Contains(ext))
                 {
                     ModelState.AddModelError("Evidence", "Only PDF and DOCX files are allowed.");
-
                     return View(row);
                 }
 
                 const long max = 5 * 1024 * 1024;
-
                 if (evidence.Length > max)
                 {
                     ModelState.AddModelError("Evidence", "File size must be less than 5 MB.");
@@ -166,11 +198,9 @@ namespace ST10395938_POEPart2.Controllers
                 }
 
                 var dir = Path.Combine(_env.WebRootPath, "uploads");
-
                 Directory.CreateDirectory(dir);
 
                 var unique = $"{Guid.NewGuid():N}{ext}";
-
                 using (var fs = System.IO.File.Create(Path.Combine(dir, unique)))
                 {
                     await evidence.CopyToAsync(fs);
@@ -180,7 +210,6 @@ namespace ST10395938_POEPart2.Controllers
             }
 
             row.Status = "Pending";
-
             row.ReviewNote = null;
             row.ReviewedBy = null;
             row.ReviewedAt = null;
@@ -193,7 +222,6 @@ namespace ST10395938_POEPart2.Controllers
             TempData["Message"] = "Log updated successfully and is now pending review.";
 
             return RedirectToAction(nameof(MyClaims), new { lecturerName = row.LecturerName });
-
         }
     }
 }

@@ -13,6 +13,8 @@ namespace ST10395938_POEPart2.Models
 
         public decimal Rate {  get; set; }
 
+        public decimal Amount { get; set; }
+
         [MaxLength(500)]
         public string? Note { get; set; }
         

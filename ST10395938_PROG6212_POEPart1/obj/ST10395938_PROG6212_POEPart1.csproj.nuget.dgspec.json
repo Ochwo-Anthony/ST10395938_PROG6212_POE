@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_PROG6212_POEPart1\\ST10395938_PROG6212_POEPart1.csproj": {}
+    "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_PROG6212_POEPart1\\ST10395938_PROG6212_POEPart1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_PROG6212_POEPart1\\ST10395938_PROG6212_POEPart1.csproj": {
+    "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_PROG6212_POEPart1\\ST10395938_PROG6212_POEPart1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_PROG6212_POEPart1\\ST10395938_PROG6212_POEPart1.csproj",
+        "projectUniqueName": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_PROG6212_POEPart1\\ST10395938_PROG6212_POEPart1.csproj",
         "projectName": "ST10395938_PROG6212_POEPart1",
-        "projectPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_PROG6212_POEPart1\\ST10395938_PROG6212_POEPart1.csproj",
+        "projectPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_PROG6212_POEPart1\\ST10395938_PROG6212_POEPart1.csproj",
         "packagesPath": "C:\\Users\\lab_services_student\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_PROG6212_POEPart1\\obj\\",
+        "outputPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_PROG6212_POEPart1\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

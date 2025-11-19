@@ -1,21 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_POEPart2\\",
+  "WorkspaceRootPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poepart2\\st10395938_poepart2\\controllers\\claimscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|solutionrelative:controllers\\claimscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poe\\st10395938_poepart2\\data\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|solutionrelative:data\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poepart2\\st10395938_poepart2\\views\\coordinator\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|solutionrelative:views\\coordinator\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poe\\st10395938_poepart2\\views\\user\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|solutionrelative:views\\user\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poepart2\\st10395938_poepart2\\views\\claims\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|solutionrelative:views\\claims\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4C3B310F-67B9-460C-B1EB-7F1E42E97FBC}|..\\LecturerClaimTest\\LecturerClaimTest.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poepart2\\lecturerclaimtest\\claimtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poe\\st10395938_poepart2\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -25,56 +22,46 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_POEPart2\\Views\\Coordinator\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Coordinator\\Index.cshtml",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_POEPart2\\Views\\Coordinator\\Index.cshtml",
-              "RelativeToolTip": "Views\\Coordinator\\Index.cshtml",
-              "ViewState": "AgIAAJ8AAAAAAAAAAAAAALMAAABUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-23T10:23:58.368Z"
+              "DocumentIndex": 0,
+              "Title": "SeedData.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Data\\SeedData.cs",
+              "RelativeDocumentMoniker": "Data\\SeedData.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Data\\SeedData.cs",
+              "RelativeToolTip": "Data\\SeedData.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwBMAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-19T22:30:15.129Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ClaimsController.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_POEPart2\\Controllers\\ClaimsController.cs",
-              "RelativeDocumentMoniker": "Controllers\\ClaimsController.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_POEPart2\\Controllers\\ClaimsController.cs",
-              "RelativeToolTip": "Controllers\\ClaimsController.cs",
-              "ViewState": "AgIAAC8AAAAAAAAAAAAIwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-23T10:18:32.839Z",
+              "DocumentIndex": 1,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Views\\User\\Login.cshtml",
+              "RelativeDocumentMoniker": "Views\\User\\Login.cshtml",
+              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Views\\User\\Login.cshtml",
+              "RelativeToolTip": "Views\\User\\Login.cshtml",
+              "ViewState": "AgIAABwAAAAAAAAAAAAuwDgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-19T22:29:21.092Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_POEPart2\\Views\\Claims\\Create.cshtml",
-              "RelativeDocumentMoniker": "Views\\Claims\\Create.cshtml",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\ST10395938_POEPart2\\Views\\Claims\\Create.cshtml",
-              "RelativeToolTip": "Views\\Claims\\Create.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-10-23T09:46:30.875Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ClaimTest.cs",
-              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\LecturerClaimTest\\ClaimTest.cs",
-              "RelativeDocumentMoniker": "..\\LecturerClaimTest\\ClaimTest.cs",
-              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POEPart2\\LecturerClaimTest\\ClaimTest.cs",
-              "RelativeToolTip": "..\\LecturerClaimTest\\ClaimTest.cs",
-              "ViewState": "AgIAAA4AAACAMjMzMzMZwAwAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-21T22:18:24.209Z"
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-19T22:21:16.813Z",
+              "EditorCaption": ""
             }
           ]
         }
