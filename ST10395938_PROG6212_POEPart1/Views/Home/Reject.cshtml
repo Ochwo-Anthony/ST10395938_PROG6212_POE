@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewData["Title"] = "Reject Claim";
+    Layout = "_Layout";
+}
+
+<h2>Reject Claim</h2>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <p><strong>Claim ID:</strong> 001 </p>
+        <p><strong>Month:</strong> July</p>
+        <p><strong>Total:</strong> 8000</p>
+        <hr />
+        <form>
+            <div class="mb-3">
+                <label class="form-label">Reason for Rejection</label>
+                <textarea class="form-control" rows="4" placeholder="Enter detailed reason..."></textarea>
+            </div>
+            <button type="button" class="btn btn-danger">Reject Claim</button>
+            <a href="/Home/CoordinatorApproval" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

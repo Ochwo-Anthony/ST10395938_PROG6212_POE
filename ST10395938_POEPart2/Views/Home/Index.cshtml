@@ -1,0 +1,168 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-5" style="font-weight: 600;">
+        Welcome to Contract Monthly Claim
+        System (CMCS)
+    </h1>
+
+    <div class="row justify-content-center g-4">
+        <!-- Lecturer Card -->
+        <div class="col-md-4">
+            <div class="card role-card lecturer-card shadow-sm h-100 text-center p-4 border-0">
+                <div class="role-icon mb-3">
+                    <img src="~/images/lecturer.jpg" alt="Lecturer" class="img-fluid rounded" style="width:260px;height:160px;">
+                </div>
+                <h5 class="card-title mb-3" style="font-weight: 600;">Lecturer</h5>
+                <p class="card-text text-muted mb-4">Submit and view your claims, check status and payment details.</p>
+                <a asp-controller="Claims" asp-action="Index" class="btn role-btn lecturer-btn btn-lg w-100">Go to Lecturer Portal</a>
+            </div>
+        </div>
+
+        <!-- Coordinator Card -->
+        <div class="col-md-4">
+            <div class="card role-card coordinator-card shadow-sm h-100 text-center p-4 border-0">
+                <div class="role-icon mb-3">
+                    <img src="~/images/coordinator.jpg" alt="Coordinator" class="img-fluid rounded" style="width:260px;height:160px">
+                </div>
+                <h5 class="card-title mb-3" style="font-weight: 600;">Coordinator</h5>
+                <p class="card-text text-muted mb-4">Review pending claims submitted by lecturers and approve or reject.</p>
+                <a asp-controller="Coordinator" asp-action="Index" class="btn role-btn coordinator-btn btn-lg w-100">Go to Coordinator Portal</a>
+            </div>
+        </div>
+
+        <!-- Manager Card -->
+        <div class="col-md-4">
+            <div class="card role-card manager-card shadow-sm h-100 text-center p-4 border-0">
+                <div class="role-icon mb-3">
+                    <img src="~/images/manager.jpg" alt="Manager" class="img-fluid rounded" style="width:260px;height:160px">
+                </div>
+                <h5 class="card-title mb-3" style="font-weight: 600;">Manager</h5>
+                <p class="card-text text-muted mb-4">Approve claims that have been approved by coordinators and manage payments.</p>
+                <a asp-controller="Manager" asp-action="Index" class="btn role-btn manager-btn btn-lg w-100">Go to Manager Portal</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Card styling */
+    .role-card {
+        border-radius: 1rem;
+        background: white;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+    }
+
+        /* Card hover effects */
+        .role-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+        }
+
+    /* Lecturer Card Hover */
+    .lecturer-card:hover {
+        background: linear-gradient(135deg, rgba(13, 110, 253, 0.05) 0%, rgba(13, 202, 240, 0.05) 100%);
+    }
+
+    /* Coordinator Card Hover */
+    .coordinator-card:hover {
+        background: linear-gradient(135deg, rgba(25, 135, 84, 0.05) 0%, rgba(32, 201, 151, 0.05) 100%);
+    }
+
+    /* Manager Card Hover */
+    .manager-card:hover {
+        background: linear-gradient(135deg, rgba(220, 53, 69, 0.05) 0%, rgba(253, 126, 20, 0.05) 100%);
+    }
+
+    /* Button styling */
+    .role-btn {
+        background: linear-gradient(90deg, #0d6efd, #0dcaf0);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .role-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .role-btn:hover::before {
+            left: 100%;
+        }
+
+    .lecturer-btn {
+        background: linear-gradient(90deg, #0d6efd, #0dcaf0);
+    }
+
+        .lecturer-btn:hover {
+            background: linear-gradient(90deg, #0dcaf0, #0d6efd);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+        }
+
+    .coordinator-btn {
+        background: linear-gradient(90deg, #198754, #20c997);
+    }
+
+        .coordinator-btn:hover {
+            background: linear-gradient(90deg, #20c997, #198754);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
+        }
+
+    .manager-btn {
+        background: linear-gradient(90deg, #dc3545, #fd7e14);
+    }
+
+        .manager-btn:hover {
+            background: linear-gradient(90deg, #fd7e14, #dc3545);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+
+    /* Role icons */
+    .role-icon {
+        margin-bottom: 20px;
+    }
+
+        .role-icon img {
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+    .role-card:hover .role-icon img {
+        transform: scale(1.05);
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .container {
+            padding: 0 15px;
+        }
+
+        .role-card {
+            margin-bottom: 20px;
+        }
+
+        .role-btn {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+    }
+</style>

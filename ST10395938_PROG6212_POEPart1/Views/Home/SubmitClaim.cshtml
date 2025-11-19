@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Submit Claim";
+    Layout = "_Layout";
+}
+<h2 class="mt-4 mb-3 text-center">Submit Claim</h2>
+
+<div class="card shadow-sm p-4 mt-3">
+    <div class="card-body">
+        <form>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Month</label>
+                    <input type="text" class="form-control" placeholder="e.g., July" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Year</label>
+                    <input type="number" class="form-control" placeholder="e.g., 2025" />
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Hours Worked</label>
+                    <input type="number" class="form-control" placeholder="e.g., 40" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Hourly Rate</label>
+                    <input type="number" class="form-control" placeholder="e.g., 200" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Total</label>
+                <input type="text" class="form-control" value="8000" disabled />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Upload Supporting Document</label>
+                <input type="file" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Additional Notes</label>
+                <textarea class="form-control" rows="3" placeholder="Enter any extra information here..."></textarea>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary px-5">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>

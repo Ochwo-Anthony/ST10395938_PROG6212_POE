@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Track Claim";
+    Layout = "_Layout";
+}
+<h2 class="mt-4 mb-3 text-center">Track Claim</h2>
+
+<div class="row mb-3">
+    <div class="col-md-4 offset-md-8">
+        <input type="text" class="form-control" placeholder="Search by Claim ID..." />
+    </div>
+</div>
+
+<table class="table table-bordered mt-2" >
+    <thead class="thead-light">
+        <tr>
+            <th>Claim ID</th>
+            <th>Month</th>
+            <th>Year</th>
+            <th>Hours Worked</th>
+            <th>Rate</th>
+            <th>Total</th>
+            <th>Coordinator Approval</th>
+            <th>Manager Approval</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>001</td>
+            <td>July</td>
+            <td>2025</td>
+            <td>40</td>
+            <td>200</td>
+            <td>8000</td>
+            <td>Pending</td>
+            <td>Not Started</td>
+        </tr>
+        <tr>
+            <td>002</td>
+            <td>August</td>
+            <td>2025</td>
+            <td>35</td>
+            <td>180</td>
+            <td>6300</td>
+            <td>Approved</td>
+            <td>Pending</td>
+        </tr>
+    </tbody>
+</table>

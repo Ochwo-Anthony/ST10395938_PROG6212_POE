@@ -1,0 +1,179 @@
+﻿@model IEnumerable<ST10395938_POEPart2.Models.LecturerClaim>
+
+@{
+    ViewData["Title"] = "Dashboard";
+
+    var submittedCount = Model?.Count() ?? 0;
+    var approvedCount = Model?.Count(c => c.Status == "Manager Approved" || c.Status == "Coordinator Approved") ?? 0;
+    var rejectedCount = Model?.Count(c => c.Status == "Needs Fix" || c.Status == "Rejected") ?? 0;
+}
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Left Sidebar -->
+        <div class="col-md-3 col-lg-2 p-4 rounded shadow-sm" style="background: linear-gradient(180deg, #f8f9fb 0%, #e9f1f7 100%);">
+            <div class="text-center mb-4">
+                <img src="~/images/placeholder.jpg" alt="Profile" class="img-fluid rounded-circle mb-2" style="width:100px; border: 3px solid #0d6efd;">
+                <h5 class="mt-2" style="font-weight: 600;">Lecturer Name</h5>
+                <p class="text-muted">Lecturer</p>
+            </div>
+            <div class="d-grid gap-2">
+                <a asp-action="Create" class="btn btn-primary btn-lg">Submit Claim</a>
+                <a asp-action="MyClaims" class="btn btn-outline-primary btn-lg">View My Claims</a>
+            </div>
+        </div>
+
+        <!-- Right Main Content -->
+        <div class="col-md-9 col-lg-10 ps-md-4">
+            <h2 class="mb-4" style="font-weight: 600;">Claims Summary</h2>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body text-center p-4">
+                            <h5 class="card-title" style="font-weight: 600;">Submitted</h5>
+                            <p class="card-text display-6" style="color: #0d6efd; font-weight: 600;">@submittedCount</p>
+                            <small class="text-muted">Total claims submitted</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body text-center p-4">
+                            <h5 class="card-title" style="font-weight: 600;">Approved</h5>
+                            <p class="card-text display-6" style="color: #198754; font-weight: 600;">@approvedCount</p>
+                            <small class="text-muted">Approved by management</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body text-center p-4">
+                            <h5 class="card-title" style="font-weight: 600;">Rejected</h5>
+                            <p class="card-text display-6" style="color: #dc3545; font-weight: 600;">@rejectedCount</p>
+                            <small class="text-muted">Requires attention</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Claims Table -->
+            <div class="mt-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 style="font-weight: 600;">Recent Claims</h4>
+                    <a asp-action="MyClaims" class="btn btn-outline-primary">View All</a>
+                </div>
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light" style="background: linear-gradient(90deg, #0d6efd, #0dcaf0); color: white;">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Status</th>
+                                        <th>Hours</th>
+                                        <th>Rate</th>
+                                        <th>Total</th>
+                                        <th>Submitted On</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null && Model.Any())
+                                    {
+                                        @foreach (var claim in Model.OrderByDescending(c => c.CreateAt).Take(5))
+                                        {
+                                            <tr>
+                                                <td class="fw-bold">@claim.Id</td>
+                                                <td>
+                                                    @{
+                                                        var statusClass = "";
+                                                        if (claim.Status == "Manager Approved" || claim.Status == "Coordinator Approved")
+                                                        {
+                                                            statusClass = "badge bg-success";
+                                                        }
+                                                        else if (claim.Status == "Needs Fix" || claim.Status == "Rejected")
+                                                        {
+                                                            statusClass = "badge bg-danger";
+                                                        }
+                                                        else
+                                                        {
+                                                            statusClass = "badge bg-secondary";
+                                                        }
+                                                    }
+                                                    <span class="@statusClass">@claim.Status</span>
+                                                </td>
+                                                <td>@claim.HoursWorked</td>
+                                                <td>@($"R {claim.Rate:N2}")</td>
+                                                <td class="fw-bold">@($"R {(claim.HoursWorked * claim.Rate):N2}")</td>
+                                                <td>@claim.CreateAt.ToLocalTime().ToString("yyyy-MM-dd")</td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="6" class="text-center py-4">
+                                                <div class="text-muted">
+                                                    <i class="fas fa-inbox fa-2x mb-2"></i>
+                                                    <p>No claims available</p>
+                                                    <a asp-action="Create" class="btn btn-primary mt-2">Submit Your First Claim</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    .card {
+        border-radius: 1rem;
+        transition: transform 0.2s;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #0d6efd, #0dcaf0);
+        border: none;
+        font-weight: 600;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #0dcaf0, #0d6efd);
+        }
+
+    .btn-outline-primary {
+        font-weight: 600;
+    }
+
+    .table th {
+        font-weight: 600;
+        border: none;
+    }
+
+    .table td {
+        border: none;
+        padding: 1rem 0.75rem;
+    }
+
+    .table tbody tr {
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.35em 0.65em;
+    }
+</style>

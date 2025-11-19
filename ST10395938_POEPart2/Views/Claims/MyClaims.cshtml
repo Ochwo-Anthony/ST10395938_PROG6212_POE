@@ -1,0 +1,286 @@
+﻿@model IEnumerable<ST10395938_POEPart2.Models.LecturerClaim>
+@{
+    ViewData["Title"] = "My Claims";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-transparent border-0 pt-4">
+            <h2 class="text-center mb-0" style="font-weight: 600;">My Submitted Claims</h2>
+            <p class="text-center text-muted mt-2">View and manage all your submitted claims</p>
+        </div>
+
+        <div class="card-body p-4">
+            <!-- Filter and Search Section -->
+            <form method="get" asp-action="MyClaims" class="row mb-4 p-4 rounded-3" style="background: linear-gradient(135deg, #f8f9fb 0%, #e9f1f7 100%);">
+                <div class="col-md-4 mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-search text-primary"></i>
+                        </span>
+                        <input type="text" name="lecturerName" value="@ViewBag.LecturerName" class="form-control border-start-0" placeholder="Search by Lecturer Name" />
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-filter text-primary"></i>
+                        </span>
+                        <select name="status" class="form-select border-start-0">
+                            @foreach (var s in ViewBag.Statuses as string[])
+                            {
+                                <option value="@s" selected="@(ViewBag.Status == s)">
+                                    @s
+                                </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <button type="submit" class="btn btn-primary w-100 h-100">
+                        <i class="fas fa-sliders-h me-2"></i>Filter
+                    </button>
+                </div>
+                <div class="col-md-3 mb-3 text-end">
+                    <a asp-action="Create" class="btn btn-success btn-lg h-100">
+                        <i class="fas fa-plus-circle me-2"></i>New Claim
+                    </a>
+                </div>
+            </form>
+
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-info text-center rounded-3 border-0 mb-4" style="background: linear-gradient(135deg, #d1ecf1, #bee5eb);">
+                    <i class="fas fa-info-circle me-2"></i>@TempData["Message"]
+                </div>
+            }
+
+            <!-- Claims Table -->
+            <div class="table-responsive rounded-3">
+                <table class="table table-hover mb-0">
+                    <thead style="background: linear-gradient(90deg, #0d6efd, #0dcaf0); color: white;">
+                        <tr>
+                            <th class="border-0">ID</th>
+                            <th class="border-0">Lecturer</th>
+                            <th class="border-0">Hours</th>
+                            <th class="border-0">Rate</th>
+                            <th class="border-0">Total</th>
+                            <th class="border-0">Status</th>
+                            <th class="border-0">Payment</th>
+                            <th class="border-0">Evidence</th>
+                            <th class="border-0">Created</th>
+                            <th class="border-0">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var claim in Model)
+                        {
+                            <tr class="align-middle">
+                                <td class="fw-bold">@claim.Id</td>
+                                <td>@claim.LecturerName</td>
+                                <td>@claim.HoursWorked</td>
+                                <td class="fw-semibold">@($"R {claim.Rate:N2}")</td>
+                                <td class="fw-bold text-primary">@($"R {claim.HoursWorked * claim.Rate:N2}")</td>
+                                <td>
+                                    @{
+                                        var statusClass = "";
+                                        if (claim.Status == "Manager Approved" || claim.Status == "Coordinator Approved")
+                                        {
+                                            statusClass = "badge bg-success";
+                                        }
+                                        else if (claim.Status == "Needs Fix" || claim.Status == "Rejected")
+                                        {
+                                            statusClass = "badge bg-danger";
+                                        }
+                                        else
+                                        {
+                                            statusClass = "badge bg-secondary";
+                                        }
+                                    }
+                                    <span class="@statusClass">@claim.Status</span>
+                                </td>
+                                <td>
+                                    @{
+                                        var paymentClass = claim.PaymentStatus == "Paid" ? "badge bg-success" :
+                                        claim.PaymentStatus == "Pending" ? "badge bg-warning" :
+                                        "badge bg-secondary";
+                                    }
+                                    <span class="@paymentClass">@claim.PaymentStatus</span>
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(claim.EvidenceFile))
+                                    {
+                                        <a href="~/uploads/@claim.EvidenceFile" target="_blank" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye me-1"></i>View File
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            <i class="fas fa-times-circle me-1"></i>No File
+                                        </span>
+                                    }
+                                </td>
+                                <td class="text-muted small">@claim.CreateAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>
+                                    @if (claim.Status == "Needs Fix")
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@claim.Id" class="btn btn-sm btn-warning">
+                                            <i class="fas fa-edit me-1"></i>Edit
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">
+                                            <i class="fas fa-lock me-1"></i>Locked
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">No Claims Found</h4>
+                        <p class="text-muted mb-4">You haven't submitted any claims yet or no claims match your filters.</p>
+                        <a asp-action="Create" class="btn btn-primary btn-lg">
+                            <i class="fas fa-plus-circle me-2"></i>Submit Your First Claim
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 1rem;
+        background: white;
+        border: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #0d6efd, #0dcaf0);
+        border: none;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #0dcaf0, #0d6efd);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+        }
+
+    .btn-success {
+        background: linear-gradient(90deg, #198754, #20c997);
+        border: none;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-success:hover {
+            background: linear-gradient(90deg, #20c997, #198754);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+        }
+
+    .btn-warning {
+        border-radius: 0.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-warning:hover {
+            transform: translateY(-1px);
+        }
+
+    .form-control, .form-select {
+        border-radius: 0.5rem;
+        border: 1px solid #dee2e6;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+        }
+
+    .input-group-text {
+        border-radius: 0.5rem 0 0 0.5rem;
+        border: 1px solid #dee2e6;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    }
+
+    .table {
+        border-radius: 0.75rem;
+        overflow: hidden;
+    }
+
+        .table th {
+            font-weight: 600;
+            padding: 1rem 0.75rem;
+            border: none;
+        }
+
+        .table td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+            .table tbody tr:hover {
+                background-color: rgba(13, 110, 253, 0.05);
+                transform: translateX(4px);
+            }
+
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.5em 0.75em;
+        border-radius: 0.5rem;
+        font-weight: 600;
+    }
+
+    .alert-info {
+        border-radius: 0.75rem;
+        border: none;
+        background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+        color: #055160;
+        font-weight: 500;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .table-responsive {
+            border-radius: 0.5rem;
+        }
+
+        .btn-lg {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .form-control, .form-select {
+            font-size: 0.9rem;
+            padding: 0.5rem 0.75rem;
+        }
+    }
+</style>
+
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">

@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "ST10395938_PROG6212_POEPart1/1.0.0": {
+        "runtime": {
+          "ST10395938_PROG6212_POEPart1.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ST10395938_PROG6212_POEPart1/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

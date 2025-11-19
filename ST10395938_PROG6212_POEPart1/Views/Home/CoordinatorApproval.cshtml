@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Coordinator Approval";
+    Layout = "_Layout";
+}
+<h2>Programme Coordinator - Approvals</h2>
+<table class="table table-bordered mt-4">
+    <thead class="thead-light">
+        <tr>
+            <th>Claim ID</th>
+            <th>Month</th>
+            <th>Year</th>
+            <th>Hours Worked</th>
+            <th>Rate</th>
+            <th>Total</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>001</td>
+            <td>July</td>
+            <td>2025</td>
+            <td>40</td>
+            <td>200</td>
+            <td>8000</td>
+            <td>
+                <button class="btn btn-success btn-sm">Approve</button>
+                <a href="/Home/Reject2" class="btn btn-danger">Reject</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
