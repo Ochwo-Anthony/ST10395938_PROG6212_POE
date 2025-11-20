@@ -1,20 +1,32 @@
-﻿@model IEnumerable<ST10395938_POEPart2.Models.LecturerClaim>
+﻿@using Microsoft.AspNetCore.Identity
+@using ST10395938_POEPart2.Models
+@inject UserManager<Users> UserManager
+@model IEnumerable<LecturerClaim>
 
 @{
     ViewData["Title"] = "Dashboard";
 
-    var submittedCount = Model?.Count() ?? 0;
-    var approvedCount = Model?.Count(c => c.Status == "Manager Approved" || c.Status == "Coordinator Approved") ?? 0;
-    var rejectedCount = Model?.Count(c => c.Status == "Needs Fix" || c.Status == "Rejected") ?? 0;
-}
+    // Get current user
+    var currentUser = await UserManager.GetUserAsync(User);
+    var lecturerName = (currentUser != null) ? $"{currentUser.FirstName} {currentUser.LastName}" : "Lecturer Name";
 
+    // Placeholder profile image
+    var profileImage = "placeholder.jpg";
+
+    // Filter claims for the current lecturer
+    var lecturerClaims = Model?.Where(c => c.LecturerName == lecturerName) ?? Enumerable.Empty<LecturerClaim>();
+
+    var submittedCount = lecturerClaims.Count();
+    var approvedCount = lecturerClaims.Count(c => c.Status == "Manager Approved" || c.Status == "Coordinator Approved");
+    var rejectedCount = lecturerClaims.Count(c => c.Status == "Needs Fix" || c.Status == "Rejected");
+}
 <div class="container-fluid mt-4">
     <div class="row">
         <!-- Left Sidebar -->
         <div class="col-md-3 col-lg-2 p-4 rounded shadow-sm" style="background: linear-gradient(180deg, #f8f9fb 0%, #e9f1f7 100%);">
             <div class="text-center mb-4">
-                <img src="~/images/placeholder.jpg" alt="Profile" class="img-fluid rounded-circle mb-2" style="width:100px; border: 3px solid #0d6efd;">
-                <h5 class="mt-2" style="font-weight: 600;">Lecturer Name</h5>
+                <img src="~/images/@profileImage" alt="Profile" class="img-fluid rounded-circle mb-2" style="width:100px; border: 3px solid #0d6efd;">
+                <h5 class="mt-2" style="font-weight: 600;">@lecturerName</h5>
                 <p class="text-muted">Lecturer</p>
             </div>
             <div class="d-grid gap-2">
@@ -78,27 +90,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (Model != null && Model.Any())
+                                    @if (lecturerClaims.Any())
                                     {
-                                        @foreach (var claim in Model.OrderByDescending(c => c.CreateAt).Take(5))
+                                        @foreach (var claim in lecturerClaims.OrderByDescending(c => c.CreateAt).Take(5))
                                         {
                                             <tr>
                                                 <td class="fw-bold">@claim.Id</td>
                                                 <td>
                                                     @{
-                                                        var statusClass = "";
-                                                        if (claim.Status == "Manager Approved" || claim.Status == "Coordinator Approved")
+                                                        var statusClass = claim.Status switch
                                                         {
-                                                            statusClass = "badge bg-success";
-                                                        }
-                                                        else if (claim.Status == "Needs Fix" || claim.Status == "Rejected")
-                                                        {
-                                                            statusClass = "badge bg-danger";
-                                                        }
-                                                        else
-                                                        {
-                                                            statusClass = "badge bg-secondary";
-                                                        }
+                                                            "Manager Approved" => "badge bg-success",
+                                                            "Coordinator Approved" => "badge bg-success",
+                                                            "Needs Fix" => "badge bg-danger",
+                                                            "Rejected" => "badge bg-danger",
+                                                            _ => "badge bg-secondary"
+                                                        };
                                                     }
                                                     <span class="@statusClass">@claim.Status</span>
                                                 </td>
@@ -131,7 +138,6 @@
     </div>
 </div>
 
-<!-- Add Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>

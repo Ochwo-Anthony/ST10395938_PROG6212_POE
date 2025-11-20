@@ -7,13 +7,13 @@
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-transparent border-0 pt-4">
-                    <h2 class="text-center mb-0" style="font-weight: 600;">Submit New Claim</h2>
-                    <p class="text-center text-muted mt-2">Fill in the details below to submit your claim</p>
+                <div class="card-header bg-transparent border-0 pt-4 text-center">
+                    <h2 class="mb-0 fw-semibold">Submit New Claim</h2>
+                    <p class="text-muted mt-2">Fill in the details below to submit your claim</p>
                 </div>
                 <div class="card-body p-4">
                     <form asp-action="Create" enctype="multipart/form-data" method="post">
-                        <!-- Display model errors -->
+                        <!-- Validation Errors -->
                         @if (!ViewData.ModelState.IsValid)
                         {
                             <div class="alert alert-danger rounded-3 mb-4">
@@ -29,7 +29,7 @@
                             </div>
                         }
 
-                        <!-- Lecturer Name (read-only) -->
+                        <!-- Lecturer Name -->
                         <div class="mb-4">
                             <label asp-for="LecturerName" class="form-label fw-semibold"></label>
                             <div class="input-group">
@@ -47,12 +47,13 @@
                                 <span class="input-group-text bg-light border-end-0">
                                     <i class="fas fa-clock text-primary"></i>
                                 </span>
-                                <input asp-for="HoursWorked" class="form-control border-start-0" type="number" step="0.01" placeholder="0.00" id="hoursWorked" />
+                                <input asp-for="HoursWorked" class="form-control border-start-0" type="number" step="0.01" placeholder="0.00" id="hoursWorked" max="180" />
                             </div>
                             <span asp-validation-for="HoursWorked" class="text-danger small mt-1"></span>
+                            <small class="form-text text-muted">Max hours per month: 180</small>
                         </div>
 
-                        <!-- Rate (read-only from HR) -->
+                        <!-- Rate -->
                         <div class="mb-4">
                             <label asp-for="Rate" class="form-label fw-semibold"></label>
                             <div class="input-group">
@@ -64,7 +65,7 @@
                             </div>
                         </div>
 
-                        <!-- Amount (calculated, read-only) -->
+                        <!-- Amount -->
                         <div class="mb-4">
                             <label asp-for="Amount" class="form-label fw-semibold">Amount</label>
                             <div class="input-group">
@@ -79,14 +80,14 @@
                         <!-- Note -->
                         <div class="mb-4">
                             <label asp-for="Note" class="form-label fw-semibold"></label>
-                            <textarea asp-for="Note" class="form-control" rows="4" placeholder="Add any additional notes or description for this claim..."></textarea>
+                            <textarea asp-for="Note" class="form-control" rows="4" placeholder="Add any notes or description..."></textarea>
                         </div>
 
-                        <!-- Evidence Upload -->
+                        <!-- Evidence -->
                         <div class="mb-4">
                             <label for="evidence" class="form-label fw-semibold">Upload Evidence (PDF/DOCX)</label>
                             <input type="file" name="evidence" class="form-control" />
-                            <div class="form-text">Supported formats: PDF, DOCX. Maximum file size: 5MB</div>
+                            <div class="form-text">Supported formats: PDF, DOCX. Max size: 5MB</div>
                         </div>
 
                         <div class="text-center mt-4 pt-3">
@@ -107,7 +108,6 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        // Auto-calculate Amount
         const hoursInput = document.getElementById("hoursWorked");
         const rateInput = document.getElementById("rate");
         const amountInput = document.getElementById("amount");
@@ -115,6 +115,11 @@
         function calculateAmount() {
             const hours = parseFloat(hoursInput.value) || 0;
             const rate = parseFloat(rateInput.value) || 0;
+            if (hours > 180) {
+                hoursInput.setCustomValidity("Cannot submit more than 180 hours per month");
+            } else {
+                hoursInput.setCustomValidity("");
+            }
             amountInput.value = (hours * rate).toFixed(2);
         }
 

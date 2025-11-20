@@ -7,168 +7,65 @@
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-transparent border-0 pt-4">
-                    <div class="text-center">
-                        <span class="badge bg-warning mb-3 px-3 py-2">
-                            <i class="fas fa-exclamation-triangle me-2"></i>Needs Fix
-                        </span>
-                        <h2 class="mb-0" style="font-weight: 600;">Edit Claim</h2>
-                        <p class="text-muted mt-2">Update the claim details as requested</p>
-                    </div>
+                <div class="card-header bg-transparent border-0 pt-4 text-center">
+                    <span class="badge bg-warning mb-3 px-3 py-2">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Needs Fix
+                    </span>
+                    <h2 class="mb-0 fw-semibold">Edit Claim</h2>
+                    <p class="text-muted mt-2">Update the claim details as requested</p>
                 </div>
                 <div class="card-body p-4">
-
-                    <!-- Display Rejection Feedback -->
+                    <!-- Feedback -->
                     @if (!string.IsNullOrEmpty(Model.ReviewNote))
                     {
-                        <div class="alert alert-info border-0 rounded-3 mb-4">
-                            <div class="d-flex align-items-start">
-                                <i class="fas fa-comment-dots fa-lg mt-1 me-3 text-primary"></i>
-                                <div class="flex-grow-1">
-                                    <h6 class="alert-heading mb-2" style="font-weight: 600;">
-                                        <i class="fas fa-info-circle me-2"></i>Feedback from Reviewer
-                                    </h6>
-                                    <p class="mb-2">@Model.ReviewNote</p>
-                                    <div class="text-muted small">
-                                        <i class="fas fa-user me-1"></i>
-                                        @if (!string.IsNullOrEmpty(Model.ReviewedBy))
-                                        {
-                                            <span>Reviewed by: @Model.ReviewedBy</span>
-                                        }
-                                        else
-                                        {
-                                            <span>Reviewed by: Coordinator/Manager</span>
-                                        }
-                                        @if (Model.ReviewedAt.HasValue)
-                                        {
-                                            <span class="ms-3">
-                                                <i class="fas fa-clock me-1"></i>
-                                                @Model.ReviewedAt.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm")
-                                            </span>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="alert alert-info rounded-3 mb-4 border-0">
+                            <i class="fas fa-comment-dots me-2"></i>@Model.ReviewNote
                         </div>
                     }
 
                     <form asp-action="Edit" enctype="multipart/form-data" method="post">
                         <input type="hidden" asp-for="Id" />
 
-                        <!-- Display validation errors -->
-                        @if (!ViewData.ModelState.IsValid)
-                        {
-                            <div class="alert alert-warning rounded-3 mb-4 border-0">
-                                <h5 class="alert-heading">
-                                    <i class="fas fa-exclamation-circle me-2"></i>Please correct the following issues:
-                                </h5>
-                                <ul class="mb-0">
-                                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                                    {
-                                        <li>@error.ErrorMessage</li>
-                                    }
-                                </ul>
-                            </div>
-                        }
-
-                        <!-- Display file-specific errors -->
-                        @if (ViewData.ModelState["Evidence"]?.Errors?.Count > 0)
-                        {
-                            <div class="alert alert-danger rounded-3 mb-4">
-                                <h5 class="alert-heading">
-                                    <i class="fas fa-file-exclamation me-2"></i>File Upload Error:
-                                </h5>
-                                <ul class="mb-0">
-                                    @foreach (var error in ViewData.ModelState["Evidence"].Errors)
-                                    {
-                                        <li>@error.ErrorMessage</li>
-                                    }
-                                </ul>
-                            </div>
-                        }
-
-                        <div class="row">
-                            <div class="col-12 mb-4">
-                                <label asp-for="LecturerName" class="form-label fw-semibold"></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0">
-                                        <i class="fas fa-user text-primary"></i>
-                                    </span>
-                                    <input asp-for="LecturerName" class="form-control border-start-0 bg-light" readonly />
-                                </div>
-                                <small class="form-text text-muted">Lecturer name cannot be modified</small>
-                            </div>
-
-                            <div class="col-md-6 mb-4">
-                                <label asp-for="HoursWorked" class="form-label fw-semibold"></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0">
-                                        <i class="fas fa-clock text-primary"></i>
-                                    </span>
-                                    <input asp-for="HoursWorked" class="form-control border-start-0" type="number" step="0.01" placeholder="0.00" />
-                                </div>
-                                <span asp-validation-for="HoursWorked" class="text-danger small mt-1"></span>
-                            </div>
-
-                            <div class="col-md-6 mb-4">
-                                <label asp-for="Rate" class="form-label fw-semibold"></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0">
-                                        <i class="fas fa-money-bill-wave text-primary"></i>
-                                    </span>
-                                    <input asp-for="Rate" class="form-control border-start-0" type="number" step="0.01" placeholder="0.00" />
-                                    <span class="input-group-text bg-light border-start-0">R</span>
-                                </div>
-                                <span asp-validation-for="Rate" class="text-danger small mt-1"></span>
-                            </div>
+                        <!-- Lecturer Name -->
+                        <div class="mb-4">
+                            <label asp-for="LecturerName" class="form-label fw-semibold"></label>
+                            <input asp-for="LecturerName" class="form-control" readonly />
                         </div>
 
+                        <!-- Hours Worked -->
+                        <div class="mb-4">
+                            <label asp-for="HoursWorked" class="form-label fw-semibold"></label>
+                            <input asp-for="HoursWorked" class="form-control" type="number" step="0.01" id="hoursWorked" max="180" />
+                            <span asp-validation-for="HoursWorked" class="text-danger small mt-1"></span>
+                        </div>
+
+                        <!-- Rate -->
+                        <div class="mb-4">
+                            <label asp-for="Rate" class="form-label fw-semibold"></label>
+                            <input asp-for="Rate" class="form-control" readonly id="rate" />
+                        </div>
+
+                        <!-- Amount -->
+                        <div class="mb-4">
+                            <label asp-for="Amount" class="form-label fw-semibold">Amount</label>
+                            <input asp-for="Amount" class="form-control" readonly id="amount" />
+                        </div>
+
+                        <!-- Note -->
                         <div class="mb-4">
                             <label asp-for="Note" class="form-label fw-semibold"></label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light align-items-start border-end-0 pt-3">
-                                    <i class="fas fa-sticky-note text-primary"></i>
-                                </span>
-                                <textarea asp-for="Note" class="form-control border-start-0" rows="4" placeholder="Update your notes or provide additional information..."></textarea>
-                            </div>
-                            <span asp-validation-for="Note" class="text-danger small mt-1"></span>
+                            <textarea asp-for="Note" class="form-control" rows="4"></textarea>
                         </div>
 
+                        <!-- Evidence -->
                         <div class="mb-4">
                             <label for="evidence" class="form-label fw-semibold">Replace Evidence (optional)</label>
-                            <div class="input-group mb-2">
-                                <span class="input-group-text bg-light border-end-0">
-                                    <i class="fas fa-file-upload text-primary"></i>
-                                </span>
-                                <input type="file" name="evidence" class="form-control border-start-0" />
-                            </div>
-                            <div class="form-text">Supported formats: PDF, DOCX. Maximum file size: 5MB</div>
-
-                            <!-- Display file validation errors -->
-                            @if (ViewData.ModelState["Evidence"]?.Errors?.Count > 0)
-                            {
-                                <div class="text-danger small mt-1">
-                                    @foreach (var error in ViewData.ModelState["Evidence"].Errors)
-                                    {
-                                        <div><i class="fas fa-exclamation-circle me-1"></i>@error.ErrorMessage</div>
-                                    }
-                                </div>
-                            }
-
+                            <input type="file" name="evidence" class="form-control" />
                             @if (!string.IsNullOrEmpty(Model.EvidenceFile))
                             {
-                                <div class="mt-3 p-3 rounded-3" style="background: linear-gradient(135deg, #f8f9fb 0%, #e9f1f7 100%);">
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-file-pdf text-danger me-3 fa-lg"></i>
-                                        <div class="flex-grow-1">
-                                            <strong class="d-block">Current Evidence File</strong>
-                                            <small class="text-muted">Uploaded on @Model.CreateAt.ToLocalTime().ToString("yyyy-MM-dd")</small>
-                                        </div>
-                                        <a href="~/uploads/@Model.EvidenceFile" target="_blank" class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-eye me-1"></i>View
-                                        </a>
-                                    </div>
-                                </div>
+                                <a href="~/uploads/@Model.EvidenceFile" target="_blank" class="btn btn-sm btn-outline-primary mt-2">
+                                    <i class="fas fa-eye me-1"></i>View Current File
+                                </a>
                             }
                         </div>
 
@@ -176,7 +73,7 @@
                             <button type="submit" class="btn btn-primary btn-lg px-5 me-3">
                                 <i class="fas fa-check-circle me-2"></i>Update Claim
                             </button>
-                            <a asp-action="MyClaims" asp-route-lecturerName="@Model.LecturerName" class="btn btn-outline-secondary btn-lg px-5">
+                            <a asp-action="MyClaims" class="btn btn-outline-secondary btn-lg px-5">
                                 <i class="fas fa-times me-2"></i>Cancel
                             </a>
                         </div>
@@ -189,154 +86,23 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        const hoursInput = document.getElementById("hoursWorked");
+        const rateInput = document.getElementById("rate");
+        const amountInput = document.getElementById("amount");
+
+        function calculateAmount() {
+            const hours = parseFloat(hoursInput.value) || 0;
+            const rate = parseFloat(rateInput.value) || 0;
+            if (hours > 180) {
+                hoursInput.setCustomValidity("Cannot submit more than 180 hours per month");
+            } else {
+                hoursInput.setCustomValidity("");
+            }
+            amountInput.value = (hours * rate).toFixed(2);
+        }
+
+        hoursInput.addEventListener("input", calculateAmount);
+        window.addEventListener("load", calculateAmount);
+    </script>
 }
-
-<style>
-    .card {
-        border-radius: 1rem;
-        background: white;
-        border: none;
-    }
-
-    .badge {
-        font-size: 0.9rem;
-        padding: 0.6em 1em;
-        border-radius: 0.75rem;
-        font-weight: 600;
-    }
-
-    .form-control {
-        border-radius: 0.5rem;
-        border: 1px solid #dee2e6;
-        padding: 0.75rem 1rem;
-        font-size: 0.95rem;
-        transition: all 0.3s ease;
-    }
-
-        .form-control:focus {
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
-        }
-
-        .form-control[readonly] {
-            background-color: #f8f9fa;
-            border-color: #e9ecef;
-        }
-
-    .input-group-text {
-        border-radius: 0.5rem 0 0 0.5rem;
-        border: 1px solid #dee2e6;
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    }
-
-    .btn-primary {
-        background: linear-gradient(90deg, #0d6efd, #0dcaf0);
-        border: none;
-        border-radius: 0.75rem;
-        font-weight: 600;
-        padding: 0.75rem 2rem;
-        transition: all 0.3s ease;
-    }
-
-        .btn-primary:hover {
-            background: linear-gradient(90deg, #0dcaf0, #0d6efd);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
-        }
-
-    .btn-outline-secondary {
-        border-radius: 0.75rem;
-        font-weight: 600;
-        padding: 0.75rem 2rem;
-        transition: all 0.3s ease;
-    }
-
-        .btn-outline-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.2);
-        }
-
-    .btn-outline-primary {
-        border-radius: 0.5rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-        .btn-outline-primary:hover {
-            transform: translateY(-1px);
-        }
-
-    .alert-info {
-        border-radius: 0.75rem;
-        border: none;
-        background: linear-gradient(135deg, #d1ecf1, #bee5eb);
-        color: #055160;
-        font-weight: 500;
-    }
-
-    .alert-warning {
-        border-radius: 0.75rem;
-        border: none;
-        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
-        color: #664d03;
-        font-weight: 500;
-    }
-
-    .alert-danger {
-        border-radius: 0.75rem;
-        border: none;
-        background: linear-gradient(135deg, #f8d7da, #f1aeb5);
-        color: #721c24;
-        font-weight: 500;
-    }
-
-    .form-label {
-        font-weight: 600;
-        color: #495057;
-        margin-bottom: 0.5rem;
-    }
-
-    .form-text {
-        font-size: 0.85rem;
-        color: #6c757d;
-        margin-top: 0.25rem;
-    }
-
-    /* File input custom styling */
-    input[type="file"]::file-selector-button {
-        background: linear-gradient(90deg, #0d6efd, #0dcaf0);
-        border: none;
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem;
-        margin-right: 1rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-        input[type="file"]::file-selector-button:hover {
-            background: linear-gradient(90deg, #0dcaf0, #0d6efd);
-        }
-
-    /* Current file display */
-    .bg-light-custom {
-        background: linear-gradient(135deg, #f8f9fb 0%, #e9f1f7 100%);
-    }
-
-    /* Responsive adjustments */
-    @@media (max-width: 768px) {
-        .btn-lg {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-control, .form-select {
-            font-size: 0.9rem;
-            padding: 0.5rem 0.75rem;
-        }
-    }
-</style>
-
-<!-- Add Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">

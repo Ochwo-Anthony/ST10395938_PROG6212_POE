@@ -14,7 +14,7 @@ namespace ST10395938_POEPart2.Controllers
         private readonly IWebHostEnvironment _env;
         private readonly UserManager<Users> _userManager;
 
-        private const int MaxMonthlyHours = 180; // example limit
+        private const int MaxMonthlyHours = 180; // max hours per month
 
         public ClaimsController(ApplicationDbContext db, IWebHostEnvironment env, UserManager<Users> userManager)
         {
@@ -25,51 +25,83 @@ namespace ST10395938_POEPart2.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var claims = await _db.LecturerClaims.AsNoTracking().ToListAsync();
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+
+            // Get recent 5 claims for dashboard
+            var claims = await _db.LecturerClaims
+                .Where(c => c.LecturerName == $"{user.FirstName} {user.LastName}")
+                .OrderByDescending(c => c.CreateAt)
+                .Take(5)
+                .ToListAsync();
+
+            // Pass user info via ViewBag (for profile display)
+            ViewBag.LecturerFullName = $"{user.FirstName} {user.LastName}";
+            ViewBag.ProfileImage = "/images/placeholder.jpg"; // placeholder for now
+
             return View(claims);
         }
 
+        // Lecturer views all claims
+        public async Task<IActionResult> MyClaims()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+
+            var claims = await _db.LecturerClaims
+                .AsNoTracking()
+                .Where(c => c.LecturerName == $"{user.FirstName} {user.LastName}")
+                .OrderByDescending(c => c.CreateAt)
+                .ToListAsync();
+
+            return View(claims);
+        }
+
+        // Create new claim
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            // Pre-fill lecturer info if logged in
-            if (User.Identity!.IsAuthenticated)
-            {
-                var user = await _userManager.GetUserAsync(User);
-                if (user != null)
-                {
-                    var model = new LecturerClaim
-                    {
-                        LecturerName = $"{user.FirstName} {user.LastName}",
-                        Rate = user.HourlyRate
-                    };
-                    return View(model);
-                }
-            }
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
 
-            return View();
+            var model = new LecturerClaim
+            {
+                LecturerName = $"{user.FirstName} {user.LastName}",
+                Rate = user.HourlyRate
+            };
+
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(LecturerClaim model, IFormFile? evidence)
+        public async Task<IActionResult> Create(decimal hoursWorked, IFormFile? evidence)
         {
-            // Validate lecturer is logged in
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return Unauthorized();
 
-            // Pull rate from HR data
-            model.LecturerName = $"{user.FirstName} {user.LastName}";
-            model.Rate = user.HourlyRate;
-
-            // Validate hours worked
-            if (model.HoursWorked > MaxMonthlyHours)
+            // Validation
+            if (hoursWorked <= 0 || hoursWorked > MaxMonthlyHours)
             {
-                ModelState.AddModelError("HoursWorked", $"Cannot submit more than {MaxMonthlyHours} hours per month.");
+                ModelState.AddModelError("HoursWorked", $"Hours must be between 1 and {MaxMonthlyHours} per month.");
+                var model = new LecturerClaim
+                {
+                    LecturerName = $"{user.FirstName} {user.LastName}",
+                    Rate = user.HourlyRate,
+                    HoursWorked = hoursWorked
+                };
                 return View(model);
             }
 
-            if (!ModelState.IsValid) return View(model);
+            var claim = new LecturerClaim
+            {
+                LecturerName = $"{user.FirstName} {user.LastName}",
+                Rate = user.HourlyRate,
+                HoursWorked = hoursWorked,
+                Amount = hoursWorked * user.HourlyRate,
+                Status = "Pending",
+                PaymentStatus = "Unpaid"
+            };
 
             // Handle evidence file
             if (evidence != null && evidence.Length > 0)
@@ -79,107 +111,85 @@ namespace ST10395938_POEPart2.Controllers
                 if (!allowed.Contains(ext))
                 {
                     ModelState.AddModelError("Evidence", "Only PDF and DOCX files are allowed.");
-                    return View(model);
+                    return View(claim);
                 }
 
-                const long max = 5 * 1024 * 1024;
-                if (evidence.Length > max)
+                const long maxSize = 5 * 1024 * 1024;
+                if (evidence.Length > maxSize)
                 {
                     ModelState.AddModelError("Evidence", "File size must be less than 5 MB.");
-                    return View(model);
+                    return View(claim);
                 }
 
                 var dir = Path.Combine(_env.WebRootPath, "uploads");
                 Directory.CreateDirectory(dir);
 
-                var unique = $"{Guid.NewGuid():N}{ext}";
-                using (var fs = System.IO.File.Create(Path.Combine(dir, unique)))
+                var uniqueName = $"{Guid.NewGuid():N}{ext}";
+                using (var fs = System.IO.File.Create(Path.Combine(dir, uniqueName)))
                 {
                     await evidence.CopyToAsync(fs);
                 }
 
-                model.EvidenceFile = unique;
+                claim.EvidenceFile = uniqueName;
             }
 
-            // Auto-calculate claim amount
-            model.Amount = model.HoursWorked * model.Rate;
-
-            model.Status = "Pending";
-            model.PaymentStatus = "Unpaid";
-
-            _db.LecturerClaims.Add(model);
+            _db.LecturerClaims.Add(claim);
             await _db.SaveChangesAsync();
 
-            return RedirectToAction(nameof(MyClaims), new { lecturerName = model.LecturerName });
+            TempData["Message"] = "Claim submitted successfully.";
+            return RedirectToAction(nameof(MyClaims));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> MyClaims(string? lecturerName, string? status)
-        {
-            var q = _db.LecturerClaims.AsNoTracking().AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(lecturerName))
-            {
-                var term = lecturerName.Trim();
-                q = q.Where(m => EF.Functions.Like(m.LecturerName, $"%{term}%"));
-            }
-
-            if (!string.IsNullOrWhiteSpace(status) && status != "All")
-            {
-                q = q.Where(m => m.Status == status);
-            }
-
-            var items = await q.OrderByDescending(m => m.CreateAt).ToListAsync();
-
-            ViewBag.LecturerName = lecturerName ?? "";
-            ViewBag.Status = string.IsNullOrWhiteSpace(status) ? "All" : status;
-            ViewBag.Statuses = new[] { "All", "Pending", "Needs Fix", "Coordinator Approved", "Manager Approved", "Rejected" };
-            return View(items);
-        }
-
+        // Edit a claim that was marked "Needs Fix"
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var row = await _db.LecturerClaims.FindAsync(id);
+            var claim = await _db.LecturerClaims.FindAsync(id);
+            if (claim == null) return NotFound();
 
-            if (row == null) return NotFound();
-
-            if (row.Status != "Needs Fix")
+            if (claim.Status != "Needs Fix")
             {
-                TempData["Message"] = "Only logs with status 'Needs Fix' can be edited.";
-                return RedirectToAction(nameof(MyClaims), new { lecturerName = row.LecturerName });
+                TempData["Message"] = "Only claims with status 'Needs Fix' can be edited.";
+                return RedirectToAction(nameof(MyClaims));
             }
 
-            return View(row);
+            return View(claim);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, LecturerClaim input, IFormFile? evidence)
+        public async Task<IActionResult> Edit(int id, decimal hoursWorked, IFormFile? evidence)
         {
-            var row = await _db.LecturerClaims.FindAsync(id);
-            if (row == null) return NotFound();
+            var claim = await _db.LecturerClaims.FindAsync(id);
+            if (claim == null) return NotFound();
 
-            if (row.Status != "Needs Fix")
+            if (claim.Status != "Needs Fix")
             {
-                TempData["Message"] = "Only claims that need Fixing can be edited";
-                return RedirectToAction(nameof(MyClaims), new { lecturerName = row.LecturerName });
+                TempData["Message"] = "Only claims with status 'Needs Fix' can be edited.";
+                return RedirectToAction(nameof(MyClaims));
             }
 
-            // Validate max hours
-            if (input.HoursWorked > MaxMonthlyHours)
+            // Validate hours
+            if (hoursWorked <= 0 || hoursWorked > MaxMonthlyHours)
             {
-                ModelState.AddModelError("HoursWorked", $"Cannot submit more than {MaxMonthlyHours} hours per month.");
-                return View(row);
+                ModelState.AddModelError("HoursWorked", $"Hours must be between 1 and {MaxMonthlyHours} per month.");
+                return View(claim);
             }
 
-            if (!ModelState.IsValid) return View(row);
+            // Update claim
+            claim.HoursWorked = hoursWorked;
+            var user = await _userManager.GetUserAsync(User);
+            claim.Rate = user.HourlyRate;
+            claim.Amount = hoursWorked * claim.Rate;
+            claim.Status = "Pending";
+            claim.ReviewNote = null;
+            claim.ReviewedBy = null;
+            claim.ReviewedAt = null;
+            claim.PaymentStatus = "Unpaid";
+            claim.PaymentReference = null;
+            claim.PaidUTc = null;
 
-            row.HoursWorked = input.HoursWorked;
-            row.Rate = input.Rate;
-            row.Note = input.Note;
-            row.Amount = row.HoursWorked * row.Rate;
-
+            // Handle evidence
             if (evidence != null && evidence.Length > 0)
             {
                 var ext = Path.GetExtension(evidence.FileName).ToLowerInvariant();
@@ -187,41 +197,32 @@ namespace ST10395938_POEPart2.Controllers
                 if (!allowed.Contains(ext))
                 {
                     ModelState.AddModelError("Evidence", "Only PDF and DOCX files are allowed.");
-                    return View(row);
+                    return View(claim);
                 }
 
-                const long max = 5 * 1024 * 1024;
-                if (evidence.Length > max)
+                const long maxSize = 5 * 1024 * 1024;
+                if (evidence.Length > maxSize)
                 {
                     ModelState.AddModelError("Evidence", "File size must be less than 5 MB.");
-                    return View(row);
+                    return View(claim);
                 }
 
                 var dir = Path.Combine(_env.WebRootPath, "uploads");
                 Directory.CreateDirectory(dir);
 
-                var unique = $"{Guid.NewGuid():N}{ext}";
-                using (var fs = System.IO.File.Create(Path.Combine(dir, unique)))
+                var uniqueName = $"{Guid.NewGuid():N}{ext}";
+                using (var fs = System.IO.File.Create(Path.Combine(dir, uniqueName)))
                 {
                     await evidence.CopyToAsync(fs);
                 }
 
-                row.EvidenceFile = unique;
+                claim.EvidenceFile = uniqueName;
             }
 
-            row.Status = "Pending";
-            row.ReviewNote = null;
-            row.ReviewedBy = null;
-            row.ReviewedAt = null;
-            row.PaymentStatus = "Unpaid";
-            row.PaymentReference = null;
-            row.PaidUTc = null;
-
             await _db.SaveChangesAsync();
+            TempData["Message"] = "Claim updated and resubmitted for review.";
 
-            TempData["Message"] = "Log updated successfully and is now pending review.";
-
-            return RedirectToAction(nameof(MyClaims), new { lecturerName = row.LecturerName });
+            return RedirectToAction(nameof(MyClaims));
         }
     }
 }
