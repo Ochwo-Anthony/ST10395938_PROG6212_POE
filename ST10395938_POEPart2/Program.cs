@@ -7,16 +7,18 @@ namespace ST10395938_POEPart2
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Add services to the container
             builder.Services.AddControllersWithViews();
 
+            // Configure DbContext with SQL Server
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Configure Identity
             builder.Services.AddIdentity<Users, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -27,18 +29,26 @@ namespace ST10395938_POEPart2
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
+            // Configure authentication cookie paths
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/User/Login";
                 options.LogoutPath = "/User/Logout";
             });
 
-            // Add session if needed
+            // Add session support
             builder.Services.AddSession();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Seed initial roles and default users for all roles
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                await SeedData.EnsureSeededAsync(services);
+            }
+
+            // Configure HTTP request pipeline
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
@@ -46,20 +56,16 @@ namespace ST10395938_POEPart2
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles(); // ? ADD THIS
+            app.UseStaticFiles();
             app.UseRouting();
-            app.UseAuthentication(); // ? ADD THIS (CRITICAL)
+            app.UseAuthentication();
             app.UseAuthorization();
-            app.UseSession(); // ? ADD IF USING SESSIONS
+            app.UseSession();
 
-            app.MapStaticAssets();
+            // Default route: show login page first
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=User}/{action=Login}/{id?}")
-                .WithStaticAssets();
-
-            // Add data seeding if needed
-            // await SeedData.EnsureSeededAsync(app.Services);
+                pattern: "{controller=User}/{action=Login}/{id?}");
 
             app.Run();
         }

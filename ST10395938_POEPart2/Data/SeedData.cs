@@ -11,27 +11,58 @@ namespace ST10395938_POEPart2.Data
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Users>>();
 
+            // Define roles
             string[] roles = new[] { "HR", "Lecturer", "Coordinator", "Manager" };
-            foreach (var r in roles)
-                if (!await roleManager.RoleExistsAsync(r))
-                    await roleManager.CreateAsync(new IdentityRole(r));
 
-            // create initial HR user if not exists
-            var hrEmail = "hr@example.com";
-            var hr = await userManager.FindByEmailAsync(hrEmail);
-            if (hr == null)
+            // Ensure roles exist
+            foreach (var role in roles)
             {
-                hr = new Users
+                if (!await roleManager.RoleExistsAsync(role))
                 {
-                    UserName = "hr",
-                    Email = hrEmail,
-                    FirstName = "System",
-                    LastName = "HR",
-                    HourlyRate = 0
-                };
-                var res = await userManager.CreateAsync(hr, "HrP@ssw0rd!"); // change password in prod
-                if (res.Succeeded)
-                    await userManager.AddToRoleAsync(hr, "HR");
+                    await roleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
+
+            // Default users - use email as username for consistency
+            var defaultUsers = new List<(string Email, string FirstName, string LastName, string Role, decimal HourlyRate, string Password)>
+            {
+                ("hr@example.com", "System", "HR", "HR", 0, "Password123!"),
+                ("lecturer@example.com", "John", "Doe", "Lecturer", 100, "Password123!"),
+                ("coordinator@example.com", "Jane", "Smith", "Coordinator", 0, "Password123!"),
+                ("manager@example.com", "Mark", "Taylor", "Manager", 0, "Password123!")
+            };
+
+            foreach (var u in defaultUsers)
+            {
+                var existing = await userManager.FindByEmailAsync(u.Email);
+                if (existing == null)
+                {
+                    var user = new Users
+                    {
+                        UserName = u.Email, // Use email as username
+                        Email = u.Email,
+                        FirstName = u.FirstName,
+                        LastName = u.LastName,
+                        HourlyRate = u.HourlyRate,
+                        EmailConfirmed = true
+                    };
+
+                    var result = await userManager.CreateAsync(user, u.Password);
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(user, u.Role);
+                        Console.WriteLine($"Created user: {u.Email} with role: {u.Role}");
+                    }
+                    else
+                    {
+                        var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                        Console.WriteLine($"Failed to create user {u.Email}: {errors}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"User {u.Email} already exists");
+                }
             }
         }
     }

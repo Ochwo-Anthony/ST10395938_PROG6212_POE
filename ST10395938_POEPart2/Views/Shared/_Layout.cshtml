@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using ST10395938_POEPart2.Models
+@inject SignInManager<Users> SignInManager
+@inject UserManager<Users> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -12,12 +17,14 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
-    <!-- Custom Theme -->
     <style>
         body {
             background: linear-gradient(180deg, #f8f9fb 0%, #e9f1f7 100%);
             font-family: 'Inter', sans-serif;
             color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         nav.navbar {
@@ -31,19 +38,29 @@
         }
 
             .nav-link:hover {
+                color: #e9ecef !important;
                 text-decoration: underline;
             }
+
+        main {
+            flex: 1;
+        }
 
         footer {
             background-color: #0d6efd;
             color: white;
             padding: 10px 0;
+            margin-top: auto;
         }
 
             footer a {
                 color: #fff;
                 text-decoration: underline;
             }
+
+                footer a:hover {
+                    color: #e9ecef;
+                }
 
         .card {
             border: none;
@@ -58,6 +75,7 @@
 
             .btn-primary:hover {
                 background: linear-gradient(90deg, #0dcaf0, #0d6efd);
+                transform: translateY(-1px);
             }
 
         h1, h2, h3, h4, h5 {
@@ -67,6 +85,15 @@
         .container {
             max-width: 1200px;
         }
+
+        /* Logout form styling */
+        .logout-form {
+            display: inline;
+        }
+
+        .logout-btn {
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -74,15 +101,76 @@
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ST10395938_POE Part 2</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Claims" asp-action="Index">Claims</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Coordinator" asp-action="Index">Coordinator</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Manager" asp-action="Index">Manager</a></li>
+
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <!-- HR sees everything -->
+                            @if (User.IsInRole("HR"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Claims" asp-action="Index">Claims</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Coordinator" asp-action="Index">Coordinator</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Manager" asp-action="Index">Manager</a>
+                                </li>
+                            }
+                            
+                            else if (User.IsInRole("Lecturer"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Claims" asp-action="Index">My Claims</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Claims" asp-action="Create">Create Claim</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Claims" asp-action="MyClaims">Track Claims</a>
+                                </li>
+                            }
+                            
+                            else if (User.IsInRole("Coordinator"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Coordinator" asp-action="Index">Coordinator</a>
+                                </li>
+                            }
+                           
+                            else if (User.IsInRole("Manager"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Manager" asp-action="Index">Manager</a>
+                                </li>
+                            }
+
+                            <!-- Logout button -->
+                            <li class="nav-item">
+                                <form class="logout-form" asp-area="" asp-controller="User" asp-action="Logout" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-outline-light btn-sm logout-btn">Logout</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <!-- Show login/register links when user is not signed in -->
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="User" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="User" asp-action="Register">Register</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -95,12 +183,13 @@
 
     <footer class="text-center">
         <div class="container">
-            &copy; 2025 - ST10395938_POE Part 2 | <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - ST10395938_POE Part 2 | <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

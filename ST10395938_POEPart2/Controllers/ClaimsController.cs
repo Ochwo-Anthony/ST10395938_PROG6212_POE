@@ -7,7 +7,7 @@ using ST10395938_POEPart2.Models;
 
 namespace ST10395938_POEPart2.Controllers
 {
-    [Authorize(Roles = "Lecturer,HR,Coordinator,Manager")]
+    [Authorize(Roles = "Lecturer,HR")]
     public class ClaimsController : Controller
     {
         private readonly ApplicationDbContext _db;
