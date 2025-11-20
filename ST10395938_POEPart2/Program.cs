@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF;  // <- Add this
+using QuestPDF.Infrastructure;
 using ST10395938_POEPart2.Data;
 using ST10395938_POEPart2.Models;
 
@@ -40,6 +42,9 @@ namespace ST10395938_POEPart2
             builder.Services.AddSession();
 
             var app = builder.Build();
+
+            // **Set QuestPDF license**
+            QuestPDF.Settings.License = LicenseType.Community;
 
             // Seed initial roles and default users for all roles
             using (var scope = app.Services.CreateScope())

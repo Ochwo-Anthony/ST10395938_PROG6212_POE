@@ -5,7 +5,7 @@ using ST10395938_POEPart2.Data;
 
 namespace ST10395938_POEPart2.Controllers
 {
-    [Authorize(Roles = "Coordinator")]
+    [Authorize(Roles = "Coordinator,HR")]
     public class CoordinatorController : Controller
     {
 

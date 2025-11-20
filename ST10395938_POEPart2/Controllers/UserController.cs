@@ -65,7 +65,7 @@ namespace ST10395938_POEPart2.Controllers
 
             // Redirect based on role
             if (role == "HR")
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "HR");
             else if (role == "Lecturer")
                 return RedirectToAction("Index", "Claims");
             else if (role == "Coordinator")

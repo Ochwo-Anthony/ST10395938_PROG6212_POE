@@ -5,7 +5,7 @@ using ST10395938_POEPart2.Data;
 
 namespace ST10395938_POEPart2.Controllers
 {
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Manager,HR")]
     public class ManagerController : Controller
     {
         private readonly ApplicationDbContext _db;

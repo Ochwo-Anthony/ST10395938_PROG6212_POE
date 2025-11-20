@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ST10395938_POEPart2.Models.UserWithRoleViewModel>
+@{
+    ViewData["Title"] = "HR Dashboard";
+}
+
+<div class="d-flex justify-content-between mb-3">
+    <h2>HR Dashboard - Users</h2>
+    <a class="btn btn-success" asp-action="Create">Add New User</a>
+    <a class="btn btn-primary" asp-action="GenerateReport">Download User Report (PDF)</a>
+</div>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Hourly Rate</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.FirstName @user.LastName</td>
+                <td>@user.Email</td>
+                <td>@user.Role</td>
+                <td>@user.HourlyRate.ToString("C2")</td>
+                <td>
+                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

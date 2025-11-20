@@ -1,10 +1,12 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ST10395938_POEPart2.Data;
 using ST10395938_POEPart2.Models;
 
 namespace ST10395938_POEPart2.Controllers
 {
+    [Authorize(Roles = "HR")]
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _db;
