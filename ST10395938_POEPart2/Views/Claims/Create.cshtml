@@ -21,7 +21,7 @@
             </div>
             <div class="card-body p-4">
                 <form asp-action="Create" enctype="multipart/form-data" method="post">
-                    <!-- Validation Errors -->
+                    
                     @if (!ViewData.ModelState.IsValid)
                     {
                         <div class="alert alert-danger rounded-3 mb-4 border-0">

@@ -18,7 +18,7 @@ namespace ST10395938_POEPart2.Controllers
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
-            // Clear any existing session data
+           
             HttpContext.Session.Clear();
             return View(new LoginViewModel { ReturnUrl = returnUrl });
         }
@@ -29,11 +29,10 @@ namespace ST10395938_POEPart2.Controllers
             if (!ModelState.IsValid)
                 return View(vm);
 
-            // Try to find user by email first
             var user = await _userManager.FindByEmailAsync(vm.Email);
             if (user == null)
             {
-                // If not found by email, try by username
+                
                 user = await _userManager.FindByNameAsync(vm.Email);
                 if (user == null)
                 {
@@ -42,7 +41,7 @@ namespace ST10395938_POEPart2.Controllers
                 }
             }
 
-            // Sign in using username (Identity requires UserName)
+           
             var result = await _signInManager.PasswordSignInAsync(
                 user.UserName,
                 vm.Password,
@@ -55,7 +54,6 @@ namespace ST10395938_POEPart2.Controllers
                 return View(vm);
             }
 
-            // Get roles and set session variables
             var roles = await _userManager.GetRolesAsync(user);
             var role = roles.FirstOrDefault() ?? "";
 
@@ -63,7 +61,7 @@ namespace ST10395938_POEPart2.Controllers
             HttpContext.Session.SetString("UserName", user.UserName);
             HttpContext.Session.SetString("Role", role);
 
-            // Redirect based on role
+           
             if (role == "HR")
                 return RedirectToAction("Index", "HR");
             else if (role == "Lecturer")

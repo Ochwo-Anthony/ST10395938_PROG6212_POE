@@ -11,7 +11,7 @@ namespace ST10395938_POEPart2.Controllers
     {
         private readonly ApplicationDbContext _db;
 
-        // Validation limits
+        
         private const int MaxMonthlyHours = 180;
         private const decimal MaxHourlyRate = 1000;
         private const decimal MaxTotalAmount = 100000;
@@ -48,7 +48,6 @@ namespace ST10395938_POEPart2.Controllers
             if (claim == null)
                 return NotFound();
 
-            // Validate before approving
             if (!ValidateClaim(claim, out string errorMessage))
             {
                 TempData["Message"] = $"Claim cannot be approved: {errorMessage}";

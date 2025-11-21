@@ -28,7 +28,7 @@ namespace ST10395938_POEPart2.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return Unauthorized();
 
-            // Get recent 5 claims for dashboard
+           
             var claims = await _db.LecturerClaims
                 .Where(c => c.LecturerName == $"{user.FirstName} {user.LastName}")
                 .OrderByDescending(c => c.CreateAt)
@@ -42,7 +42,7 @@ namespace ST10395938_POEPart2.Controllers
             return View(claims);
         }
 
-        // Lecturer views all claims
+        
         public async Task<IActionResult> MyClaims()
         {
             var user = await _userManager.GetUserAsync(User);

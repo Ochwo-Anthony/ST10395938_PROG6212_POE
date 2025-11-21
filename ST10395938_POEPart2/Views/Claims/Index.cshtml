@@ -6,11 +6,11 @@
 @{
     ViewData["Title"] = "Dashboard";
 
-    // Get current user
+    
     var currentUser = await UserManager.GetUserAsync(User);
     var lecturerName = (currentUser != null) ? $"{currentUser.FirstName} {currentUser.LastName}" : "Lecturer Name";
 
-    // Filter claims for the current lecturer
+    
     var lecturerClaims = Model?.Where(c => c.LecturerName == lecturerName) ?? Enumerable.Empty<LecturerClaim>();
 
     var submittedCount = lecturerClaims.Count();

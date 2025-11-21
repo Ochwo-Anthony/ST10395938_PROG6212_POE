@@ -220,7 +220,7 @@
     </div>
 </div>
 
-<!-- Single Reject Modal (outside the table) -->
+
 <div class="modal fade" id="rejectModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -233,7 +233,7 @@
             <form asp-action="Reject" method="post">
                 <input type="hidden" name="id" id="modalClaimId" />
                 <div class="modal-body">
-                    <!-- Show validation issues if any -->
+                    
                     <div class="alert alert-warning small mb-3" id="validationAlert" style="display: none;">
                         <strong>Validation Issues Found:</strong>
                         <div class="mt-1" id="validationErrors"></div>
@@ -259,19 +259,18 @@
 
 @section Scripts {
     <script>
-        // Initialize tooltips
+     
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
 
-        // Initialize popovers for validation details
+        
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
         var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
             return new bootstrap.Popover(popoverTriggerEl)
         });
 
-        // Add confirmation for approve actions
         document.querySelectorAll('form[asp-action="Approve"]').forEach(form => {
             form.addEventListener('submit', function(e) {
                 const claimAmount = this.closest('tr').querySelector('td:nth-child(5)').textContent;
@@ -281,7 +280,7 @@
             });
         });
 
-        // Handle reject button clicks
+        
         document.querySelectorAll('.reject-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const claimId = this.getAttribute('data-claim-id');
@@ -290,11 +289,11 @@
                 const validationErrors = this.getAttribute('data-validation-errors');
                 const suggestedFeedback = this.getAttribute('data-suggested-feedback');
 
-                // Set modal content
+            
                 document.getElementById('modalClaimId').value = claimId;
                 document.getElementById('modalLecturerName').textContent = lecturerName;
 
-                // Show/hide validation alert
+               
                 const validationAlert = document.getElementById('validationAlert');
                 const validationErrorsDiv = document.getElementById('validationErrors');
                 const feedbackTextarea = document.getElementById('feedbackTextarea');
@@ -308,13 +307,13 @@
                     feedbackTextarea.value = suggestedFeedback || 'Please review and fix the claim details.';
                 }
 
-                // Show modal
+                
                 const modal = new bootstrap.Modal(document.getElementById('rejectModal'));
                 modal.show();
             });
         });
 
-        // Clear modal content when hidden
+        
         document.getElementById('rejectModal').addEventListener('hidden.bs.modal', function () {
             document.getElementById('modalClaimId').value = '';
             document.getElementById('modalLecturerName').textContent = '';

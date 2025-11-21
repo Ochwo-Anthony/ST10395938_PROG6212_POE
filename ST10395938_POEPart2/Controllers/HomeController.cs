@@ -12,7 +12,7 @@ namespace ST10395938_POEPart2.Controllers
         private readonly ApplicationDbContext _db;
         private readonly ILogger<HomeController> _logger;
 
-        // Single constructor with both dependencies
+        
         public HomeController(ILogger<HomeController> logger, ApplicationDbContext db)
         {
             _logger = logger;
