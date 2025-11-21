@@ -53,12 +53,21 @@
                                 <th class="border-0">Evidence</th>
                                 <th class="border-0">Note</th>
                                 <th class="border-0">Submitted</th>
+                                <th class="border-0">Validation</th>
                                 <th class="border-0 text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var claim in Model)
                             {
+                                // Validation checks
+                                bool isHoursValid = claim.HoursWorked > 0 && claim.HoursWorked <= 180;
+                                bool isRateValid = claim.Rate > 0 && claim.Rate <= 1000;
+                                bool isTotalValid = claim.Amount == claim.HoursWorked * claim.Rate;
+                                bool isMaxTotalValid = claim.Amount <= 100000;
+
+                                bool isValid = isHoursValid && isRateValid && isTotalValid && isMaxTotalValid;
+
                                 <tr class="align-middle">
                                     <td class="fw-bold">@claim.Id</td>
                                     <td>
@@ -73,7 +82,7 @@
                                         </span>
                                     </td>
                                     <td class="fw-semibold">@claim.Rate.ToString("C")</td>
-                                    <td class="fw-bold text-success">@((claim.HoursWorked * claim.Rate).ToString("C"))</td>
+                                    <td class="fw-bold text-success">@claim.Amount.ToString("C")</td>
                                     <td>
                                         @if (!string.IsNullOrEmpty(claim.EvidenceFile))
                                         {
@@ -83,9 +92,7 @@
                                         }
                                         else
                                         {
-                                            <span class="text-muted">
-                                                <i class="fas fa-times-circle me-1"></i>No File
-                                            </span>
+                                            <span class="text-muted"><i class="fas fa-times-circle me-1"></i>No File</span>
                                         }
                                     </td>
                                     <td>
@@ -102,12 +109,64 @@
                                         }
                                     </td>
                                     <td class="text-muted small">@claim.CreateAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+
+                                    <!-- Validation Column -->
+                                    <td>
+                                        <ul class="list-unstyled mb-0">
+                                            <li>
+                                                Hours Worked:
+                                                @if (isHoursValid)
+                                                {
+                                                    <span class="text-success">Passed (@claim.HoursWorked)</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">Failed (@claim.HoursWorked)</span>
+                                                }
+                                            </li>
+                                            <li>
+                                                Hourly Rate:
+                                                @if (isRateValid)
+                                                {
+                                                    <span class="text-success">Passed (@claim.Rate.ToString("C"))</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">Failed (@claim.Rate.ToString("C"))</span>
+                                                }
+                                            </li>
+                                            <li>
+                                                Total Amount:
+                                                @if (isTotalValid)
+                                                {
+                                                    <span class="text-success">Passed (@claim.Amount.ToString("C"))</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">Failed (@claim.Amount.ToString("C"))</span>
+                                                }
+                                            </li>
+                                            <li>
+                                                Max Total (&lt;=100,000):
+                                                @if (isMaxTotalValid)
+                                                {
+                                                    <span class="text-success">Passed (@claim.Amount.ToString("C"))</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">Failed (@claim.Amount.ToString("C"))</span>
+                                                }
+                                            </li>
+                                        </ul>
+                                    </td>
+
+                                    <!-- Actions -->
                                     <td class="text-center">
                                         <div class="btn-group" role="group">
-                                            <!-- Approve & Pay Form -->
+                                            <!-- Approve button only enabled if all validations pass -->
                                             <form asp-action="Approve" method="post" class="d-inline">
                                                 <input type="hidden" name="id" value="@claim.Id" />
-                                                <button type="submit" class="btn btn-success btn-sm">
+                                                <button type="submit" class="btn btn-success btn-sm" @(isValid ? "" : "disabled")>
                                                     <i class="fas fa-check-circle me-1"></i>Approve & Pay
                                                 </button>
                                             </form>
@@ -123,402 +182,17 @@
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Summary Stats -->
-                <div class="row mt-4 g-3">
-                    <div class="col-md-3">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body text-center p-3">
-                                <h6 class="card-title text-muted mb-2">Pending Approval</h6>
-                                <p class="card-text display-6 fw-bold text-primary">@Model.Count()</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body text-center p-3">
-                                <h6 class="card-title text-muted mb-2">Total Value</h6>
-                                <p class="card-text display-6 fw-bold text-success">@Model.Sum(c => c.HoursWorked * c.Rate).ToString("C")</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body text-center p-3">
-                                <h6 class="card-title text-muted mb-2">Avg. Claim</h6>
-                                <p class="card-text display-6 fw-bold text-info">@Model.Average(c => c.HoursWorked * c.Rate).ToString("C")</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body text-center p-3">
-                                <h6 class="card-title text-muted mb-2">Top Claim</h6>
-                                <p class="card-text display-6 fw-bold text-warning">@Model.Max(c => c.HoursWorked * c.Rate).ToString("C")</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Bulk Actions -->
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body">
-                                <h6 class="card-title mb-3" style="font-weight: 600;">
-                                    <i class="fas fa-bolt me-2 text-warning"></i>Quick Actions
-                                </h6>
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#bulkApproveModal">
-                                        <i class="fas fa-check-double me-2"></i>Approve All
-                                    </button>
-                                    <button type="button" class="btn btn-outline-primary">
-                                        <i class="fas fa-download me-2"></i>Export Report
-                                    </button>
-                                    <button type="button" class="btn btn-outline-info">
-                                        <i class="fas fa-chart-bar me-2"></i>View Analytics
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             }
-        </div>
-    </div>
-</div>
-
-<!-- Move ALL modals outside the main content area - this fixes the flashing issue -->
-@foreach (var claim in Model)
-{
-    <div class="modal fade" id="rejectModal-@claim.Id" tabindex="-1" aria-labelledby="rejectLabel-@claim.Id" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header text-white" style="background: linear-gradient(90deg, #dc3545, #fd7e14); border-radius: 0.5rem 0.5rem 0 0;">
-                    <h5 class="modal-title" id="rejectLabel-@claim.Id">
-                        <i class="fas fa-exclamation-triangle me-2"></i>Reject Claim #@claim.Id
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <div class="alert alert-warning border-0 rounded-3 mb-4">
-                        <i class="fas fa-info-circle me-2"></i>
-                        <strong>Important:</strong> This claim has already been approved by a coordinator. Rejecting it will require explanation.
-                    </div>
-                    <form asp-action="Reject" method="post" id="rejectForm-@claim.Id">
-                        <input type="hidden" name="id" value="@claim.Id" />
-                        <div class="mb-4">
-                            <label for="reason-@claim.Id" class="form-label fw-semibold">Reason for Rejection</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-end-0">
-                                    <i class="fas fa-comment-dots text-primary"></i>
-                                </span>
-                                <textarea name="reason" id="reason-@claim.Id" class="form-control border-start-0" rows="4"
-                                      placeholder="Please provide detailed explanation for rejecting this coordinator-approved claim..."></textarea>
-                            </div>
-                            <div class="form-text">This feedback will be sent to both the lecturer and coordinator</div>
-                        </div>
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-danger btn-lg px-4 me-2">
-                                <i class="fas fa-ban me-2"></i>Confirm Reject
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-dismiss="modal">
-                                <i class="fas fa-times me-2"></i>Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-}
-
-<!-- Bulk Approve Modal -->
-<div class="modal fade" id="bulkApproveModal" tabindex="-1" aria-labelledby="bulkApproveLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header text-white" style="background: linear-gradient(90deg, #198754, #20c997); border-radius: 0.5rem 0.5rem 0 0;">
-                <h5 class="modal-title" id="bulkApproveLabel">
-                    <i class="fas fa-check-double me-2"></i>Approve All Claims
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="alert alert-info border-0 rounded-3 mb-4">
-                    <i class="fas fa-info-circle me-2"></i>
-                    This will approve and process payment for all <strong>@Model.Count()</strong> pending claims with a total value of <strong>@Model.Sum(c => c.HoursWorked * c.Rate).ToString("C")</strong>.
-                </div>
-                <p class="text-muted mb-4">Are you sure you want to proceed with bulk approval?</p>
-                <div class="text-end">
-                    <form asp-action="BulkApprove" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-success btn-lg px-4 me-2">
-                            <i class="fas fa-check-double me-2"></i>Confirm Approve All
-                        </button>
-                    </form>
-                    <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-2"></i>Cancel
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Initialize tooltips
+        // Initialize Bootstrap tooltips
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         })
-
-        // Add confirmation for approve actions
-        document.querySelectorAll('form[asp-action="Approve"]').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                if (!confirm('Are you sure you want to approve and process payment for this claim? This action will mark the claim as paid and complete the process.')) {
-                    e.preventDefault();
-                }
-            });
-        });
-
-        // Add confirmation for reject actions
-        document.querySelectorAll('form[asp-action="Reject"]').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                if (!confirm('Are you sure you want to reject this claim? This action cannot be undone.')) {
-                    e.preventDefault();
-                }
-            });
-        });
-
-        // Add confirmation for bulk approve
-        document.querySelector('form[asp-action="BulkApprove"]')?.addEventListener('submit', function(e) {
-            if (!confirm('This will approve ALL pending claims and process payments totaling @Model.Sum(c => c.HoursWorked * c.Rate).ToString("C"). Are you absolutely sure?')) {
-                e.preventDefault();
-            }
-        });
-
-        // Fix for modal backdrop issues
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize all modals properly
-            var modalEls = document.querySelectorAll('.modal');
-            modalEls.forEach(function(modalEl) {
-                modalEl.addEventListener('show.bs.modal', function() {
-                    // Ensure proper z-index stacking
-                    document.body.classList.add('modal-open');
-                });
-
-                modalEl.addEventListener('hidden.bs.modal', function() {
-                    // Reset forms when modal is closed
-                    const form = this.querySelector('form');
-                    if (form) {
-                        form.reset();
-                    }
-                });
-            });
-        });
     </script>
 }
-
-<style>
-    /* Fix for modal issues - CRITICAL */
-    .modal {
-        z-index: 1060 !important;
-    }
-
-    .modal-backdrop {
-        z-index: 1050 !important;
-    }
-
-    /* Ensure body doesn't have overflow issues */
-    body.modal-open {
-        overflow: hidden;
-        padding-right: 0 !important;
-    }
-
-    /* Remove any conflicting transforms or filters */
-    .modal.show {
-        transform: none !important;
-        filter: none !important;
-    }
-
-    .card {
-        border-radius: 1rem;
-        background: white;
-        border: none;
-    }
-
-    .btn-primary {
-        background: linear-gradient(90deg, #0d6efd, #0dcaf0);
-        border: none;
-        border-radius: 0.75rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-        .btn-primary:hover {
-            background: linear-gradient(90deg, #0dcaf0, #0d6efd);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
-        }
-
-    .btn-success {
-        background: linear-gradient(90deg, #198754, #20c997);
-        border: none;
-        border-radius: 0.5rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-        .btn-success:hover {
-            background: linear-gradient(90deg, #20c997, #198754);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
-        }
-
-    .btn-danger {
-        background: linear-gradient(90deg, #dc3545, #fd7e14);
-        border: none;
-        border-radius: 0.5rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-        .btn-danger:hover {
-            background: linear-gradient(90deg, #fd7e14, #dc3545);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
-        }
-
-    .btn-outline-primary, .btn-outline-success, .btn-outline-info {
-        border-radius: 0.5rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-        .btn-outline-primary:hover, .btn-outline-success:hover, .btn-outline-info:hover {
-            transform: translateY(-2px);
-        }
-
-    .form-control {
-        border-radius: 0.5rem;
-        border: 1px solid #dee2e6;
-        padding: 0.75rem 1rem;
-        font-size: 0.95rem;
-        transition: all 0.3s ease;
-    }
-
-        .form-control:focus {
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
-        }
-
-    .input-group-text {
-        border-radius: 0.5rem 0 0 0.5rem;
-        border: 1px solid #dee2e6;
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    }
-
-    .table {
-        border-radius: 0.75rem;
-        overflow: hidden;
-    }
-
-        .table th {
-            font-weight: 600;
-            padding: 1rem 0.75rem;
-            border: none;
-        }
-
-        .table td {
-            padding: 1rem 0.75rem;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .table tbody tr {
-            transition: all 0.2s ease;
-        }
-
-            .table tbody tr:hover {
-                background-color: rgba(220, 53, 69, 0.05);
-                transform: translateX(4px);
-            }
-
-    .badge {
-        font-size: 0.75rem;
-        padding: 0.5em 0.75em;
-        border-radius: 0.5rem;
-        font-weight: 600;
-    }
-
-    .modal-content {
-        border-radius: 1rem;
-        border: none;
-    }
-
-    .alert-warning, .alert-info {
-        border-radius: 0.75rem;
-        border: none;
-        font-weight: 500;
-    }
-
-    .alert-warning {
-        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
-        color: #664d03;
-    }
-
-    .alert-info {
-        background: linear-gradient(135deg, #d1ecf1, #bee5eb);
-        color: #055160;
-    }
-
-    .btn-group .btn {
-        margin: 0 2px;
-    }
-
-    /* Quick Actions Section */
-    .btn-group .btn-outline-success:hover {
-        background: linear-gradient(90deg, #198754, #20c997);
-        color: white;
-    }
-
-    .btn-group .btn-outline-primary:hover {
-        background: linear-gradient(90deg, #0d6efd, #0dcaf0);
-        color: white;
-    }
-
-    .btn-group .btn-outline-info:hover {
-        background: linear-gradient(90deg, #0dcaf0, #0d6efd);
-        color: white;
-    }
-
-    /* Responsive adjustments */
-    @@media (max-width: 768px) {
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-            .btn-group .btn {
-                margin: 0;
-            }
-
-        .table-responsive {
-            border-radius: 0.5rem;
-        }
-
-        .display-6 {
-            font-size: 1.5rem;
-        }
-
-        .quick-actions .btn-group {
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-    }
-</style>
-
-<!-- Add Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">

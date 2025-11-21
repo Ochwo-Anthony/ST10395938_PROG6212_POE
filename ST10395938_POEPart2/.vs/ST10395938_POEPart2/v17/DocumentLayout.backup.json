@@ -3,12 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poe\\st10395938_poepart2\\controllers\\claimscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|solutionrelative:controllers\\claimscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poe\\st10395938_poepart2\\views\\coordinator\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|solutionrelative:views\\coordinator\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poe\\st10395938_poepart2\\views\\manager\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|solutionrelative:views\\manager\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poe\\st10395938_poepart2\\controllers\\coordinatorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|solutionrelative:controllers\\coordinatorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poe\\st10395938_poepart2\\controllers\\managercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|solutionrelative:controllers\\managercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poe\\st10395938_poepart2\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|solutionrelative:controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poe\\st10395938_poepart2\\controllers\\claimscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|solutionrelative:controllers\\claimscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{54FA27B9-51BB-4DCD-A48E-186191CC66DB}|ST10395938_POEPart2.csproj|c:\\users\\lab_services_student\\documents\\github\\st10395938_prog6212_poe\\st10395938_poepart2\\views\\claims\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -27,6 +43,58 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Views\\Coordinator\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Coordinator\\Index.cshtml",
+              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Views\\Coordinator\\Index.cshtml",
+              "RelativeToolTip": "Views\\Coordinator\\Index.cshtml",
+              "ViewState": "AgIAALQAAAAAAAAAAAAuwMQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-21T00:17:26.913Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Views\\Manager\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Manager\\Index.cshtml",
+              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Views\\Manager\\Index.cshtml",
+              "RelativeToolTip": "Views\\Manager\\Index.cshtml",
+              "ViewState": "AgIAALQAAAAAAAAAAAAIwMUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-21T00:02:40.087Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ManagerController.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Controllers\\ManagerController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ManagerController.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Controllers\\ManagerController.cs",
+              "RelativeToolTip": "Controllers\\ManagerController.cs",
+              "ViewState": "AgIAAGoAAAAAAAAAAAAIwHsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-20T23:59:27.402Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CoordinatorController.cs",
+              "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Controllers\\CoordinatorController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CoordinatorController.cs",
+              "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Controllers\\CoordinatorController.cs",
+              "RelativeToolTip": "Controllers\\CoordinatorController.cs",
+              "ViewState": "AgIAAEkAAAAAAAAAAADwv24AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-20T23:59:18.719Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "ClaimsController.cs",
               "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Controllers\\ClaimsController.cs",
               "RelativeDocumentMoniker": "Controllers\\ClaimsController.cs",
@@ -39,20 +107,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "UserController.cs",
               "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Controllers\\UserController.cs",
               "RelativeDocumentMoniker": "Controllers\\UserController.cs",
               "ToolTip": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Controllers\\UserController.cs",
               "RelativeToolTip": "Controllers\\UserController.cs",
-              "ViewState": "AgIAADgAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-20T23:52:16.909Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\lab_services_student\\Documents\\GitHub\\ST10395938_PROG6212_POE\\ST10395938_POEPart2\\Views\\Claims\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Claims\\Index.cshtml",
@@ -60,8 +128,7 @@
               "RelativeToolTip": "Views\\Claims\\Index.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-20T23:51:58.763Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-20T23:51:58.763Z"
             }
           ]
         }
