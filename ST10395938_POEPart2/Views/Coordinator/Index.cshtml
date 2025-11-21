@@ -1,177 +1,185 @@
 ﻿@model IEnumerable<ST10395938_POEPart2.Models.LecturerClaim>
+
 @{
     ViewData["Title"] = "Coordinator Dashboard";
 }
 
-<div class="container mt-4">
+<div class="container-fluid mt-4">
+    <!-- Success Message -->
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert" style="border-radius: 8px;">
+            <span>💡 @TempData["Message"]</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
     <div class="card shadow-sm border-0">
-        <div class="card-header bg-transparent border-0 pt-4">
-            <h2 class="text-center mb-0" style="font-weight: 600;">Coordinator Dashboard</h2>
-            <p class="text-center text-muted mt-2">Review and manage pending claims</p>
+        <div class="card-header bg-transparent border-0 pt-4 pb-2">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="fw-bold mb-1" style="color: var(--primary-navy);">
+                        📋 Pending Lecturer Claims
+                    </h1>
+                    <p class="text-muted mb-0">Review and manage claims with automated validation</p>
+                </div>
+
+                <!-- Search -->
+                <form asp-action="Index" method="get" class="d-flex gap-2">
+                    <div class="input-group" style="min-width: 300px;">
+                        <span class="input-group-text" style="background: var(--background-light); color: var(--text-secondary);">
+                            🔍
+                        </span>
+                        <input type="text" name="lecturerName" value="@ViewBag.LecturerName"
+                               class="form-control" placeholder="Search lecturer name..." />
+                    </div>
+                    <button class="btn btn-primary px-4">Search</button>
+                </form>
+            </div>
         </div>
 
         <div class="card-body p-4">
-            <!-- Search Section -->
-            <form method="get" asp-action="Index" class="row mb-4 p-4 rounded-3" style="background: linear-gradient(135deg, #f8f9fb 0%, #e9f1f7 100%);">
-                <div class="col-md-8">
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0">
-                            <i class="fas fa-search text-primary"></i>
-                        </span>
-                        <input type="text" name="lecturerName" value="@ViewBag.LecturerName" class="form-control border-start-0" placeholder="Search by Lecturer Name" />
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-primary w-100 h-100">
-                        <i class="fas fa-search me-2"></i>Search Claims
-                    </button>
-                </div>
-            </form>
-
             @if (!Model.Any())
             {
                 <div class="text-center py-5">
                     <div class="mb-4">
-                        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
-                        <h4 class="text-muted">All Caught Up!</h4>
-                        <p class="text-muted mb-4">No pending claims to review at the moment.</p>
+                        <div style="width: 80px; height: 80px; background: rgba(13, 148, 136, 0.1); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;">
+                            <span style="color: var(--accent-teal); font-size: 2rem;">✅</span>
+                        </div>
                     </div>
+                    <h4 class="fw-semibold mb-2" style="color: var(--text-primary);">All Caught Up!</h4>
+                    <p class="text-muted mb-4">No pending claims to review at the moment.</p>
                 </div>
             }
             else
             {
+                <!-- Validation Summary -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body text-center p-3">
+                                <h3 class="fw-bold mb-1" style="color: var(--primary-navy);">@Model.Count()</h3>
+                                <p class="text-muted mb-0 small">Total Pending</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body text-center p-3">
+                                <h3 class="fw-bold mb-1" style="color: var(--accent-teal);">@Model.Count(IsClaimValid)</h3>
+                                <p class="text-muted mb-0 small">Ready to Approve</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body text-center p-3">
+                                <h3 class="fw-bold mb-1" style="color: var(--accent-gold);">@Model.Count(c => !IsClaimValid(c))</h3>
+                                <p class="text-muted mb-0 small">Need Review</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body text-center p-3">
+                                <h3 class="fw-bold mb-1" style="color: var(--secondary-gray);">@Model.Select(c => c.LecturerName).Distinct().Count()</h3>
+                                <p class="text-muted mb-0 small">Unique Lecturers</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Claims Table -->
-                <div class="table-responsive rounded-3">
+                <div class="table-responsive">
                     <table class="table table-hover mb-0">
-                        <thead style="background: linear-gradient(90deg, #198754, #20c997); color: white;">
+                        <thead style="background: var(--primary-navy); color: white;">
                             <tr>
-                                <th class="border-0">ID</th>
-                                <th class="border-0">Lecturer</th>
-                                <th class="border-0">Hours</th>
-                                <th class="border-0">Rate</th>
-                                <th class="border-0">Total</th>
-                                <th class="border-0">Evidence</th>
-                                <th class="border-0">Note</th>
-                                <th class="border-0">Submitted</th>
-                                <th class="border-0">Validation</th>
-                                <th class="border-0 text-center">Actions</th>
+                                <th class="ps-4 py-3 fw-semibold">Lecturer</th>
+                                <th class="py-3 fw-semibold">Hours</th>
+                                <th class="py-3 fw-semibold">Rate</th>
+                                <th class="py-3 fw-semibold">Amount</th>
+                                <th class="py-3 fw-semibold">Validation Status</th>
+                                <th class="py-3 fw-semibold">Evidence</th>
+                                <th class="pe-4 py-3 fw-semibold text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var claim in Model)
+                            @foreach (var item in Model)
                             {
-                                // Validation checks
-                                bool hoursValid = claim.HoursWorked > 0 && claim.HoursWorked <= 180;
-                                bool rateValid = claim.Rate > 0 && claim.Rate <= 1000;
-                                bool totalValid = claim.Amount == claim.HoursWorked * claim.Rate;
-                                bool maxTotalValid = claim.Amount <= 100000;
+                                var validationResult = GetValidationResult(item);
+                                var isValid = validationResult.IsValid;
 
-                                bool isValid = hoursValid && rateValid && totalValid && maxTotalValid;
-
-                                <tr class="align-middle">
-                                    <td class="fw-bold">@claim.Id</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <i class="fas fa-user-circle text-primary me-2"></i>
-                                            @claim.LecturerName
-                                        </div>
+                                <tr>
+                                    <td class="ps-4 py-3">
+                                        <div class="fw-semibold" style="color: var(--text-primary);">@item.LecturerName</div>
+                                        <div class="small text-muted">@item.CreateAt.ToString("MMM dd, yyyy")</div>
                                     </td>
-                                    <td>
-                                        <span class="badge bg-light text-dark">
-                                            <i class="fas fa-clock me-1"></i>@claim.HoursWorked
+                                    <td class="py-3">
+                                        <span class="badge rounded-pill px-3 py-2" style="background: rgba(30, 58, 138, 0.1); color: var(--primary-navy); border: 1px solid var(--primary-navy);">
+                                            ⏱️ @item.HoursWorked
                                         </span>
                                     </td>
-                                    <td class="fw-semibold">@claim.Rate.ToString("C")</td>
-                                    <td class="fw-bold text-primary">@claim.Amount.ToString("C")</td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(claim.EvidenceFile))
+                                    <td class="py-3 fw-medium" style="color: var(--text-secondary);">R @item.Rate.ToString("N2")</td>
+                                    <td class="py-3 fw-bold" style="color: var(--accent-teal);">R @item.Amount.ToString("N2")</td>
+
+                                    <!-- Validation Status -->
+                                    <td class="py-3">
+                                        @if (isValid)
                                         {
-                                            <a href="~/uploads/@claim.EvidenceFile" target="_blank" class="btn btn-sm btn-outline-primary">
-                                                <i class="fas fa-eye me-1"></i>View
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <span class="text-muted"><i class="fas fa-times-circle me-1"></i>No File</span>
-                                        }
-                                    </td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(claim.Note))
-                                        {
-                                            <span class="d-inline-block text-truncate" style="max-width: 200px;"
-                                                  data-bs-toggle="tooltip" data-bs-title="@claim.Note">
-                                                @claim.Note
+                                            <span class="badge rounded-pill px-3 py-2" style="background: rgba(25, 135, 84, 0.1); color: #198754; border: 1px solid #198754;">
+                                                ✅ All Checks Passed
                                             </span>
                                         }
                                         else
                                         {
-                                            <span class="text-muted">No note</span>
+                                            <button class="btn btn-sm btn-outline-warning"
+                                                    data-bs-toggle="popover"
+                                                    data-bs-title="Validation Issues"
+                                                    data-bs-content="@validationResult.ErrorMessage"
+                                                    data-bs-html="true">
+                                                ⚠️ @validationResult.IssuesCount Issue@(validationResult.IssuesCount > 1 ? "s" : "")
+                                            </button>
                                         }
                                     </td>
-                                    <td class="text-muted small">@claim.CreateAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
 
-                                    <!-- Validation Column -->
-                                    <td>
-                                        <ul class="list-unstyled mb-0">
-                                            <li>
-                                                Hours Worked:
-                                                @if (hoursValid)
-                                                {
-                                                    <span class="text-success">Passed (@claim.HoursWorked)</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-danger">Failed (@claim.HoursWorked)</span>
-                                                }
-                                            </li>
-                                            <li>
-                                                Hourly Rate:
-                                                @if (rateValid)
-                                                {
-                                                    <span class="text-success">Passed (@claim.Rate.ToString("C"))</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-danger">Failed (@claim.Rate.ToString("C"))</span>
-                                                }
-                                            </li>
-                                            <li>
-                                                Total Amount:
-                                                @if (totalValid)
-                                                {
-                                                    <span class="text-success">Passed (@claim.Amount.ToString("C"))</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-danger">Failed (@claim.Amount.ToString("C"))</span>
-                                                }
-                                            </li>
-                                            <li>
-                                                Max Total:
-                                                @if (maxTotalValid)
-                                                {
-                                                    <span class="text-success">Passed (@claim.Amount.ToString("C"))</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-danger">Failed (@claim.Amount.ToString("C"))</span>
-                                                }
-                                            </li>
-                                        </ul>
+                                    <!-- Evidence -->
+                                    <td class="py-3">
+                                        @if (!string.IsNullOrEmpty(item.EvidenceFile))
+                                        {
+                                            <a href="~/uploads/@item.EvidenceFile" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                👁️ View
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge rounded-pill px-3 py-2" style="background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid #dc3545;">
+                                                ⚠️ No File
+                                            </span>
+                                        }
                                     </td>
 
                                     <!-- Actions -->
-                                    <td class="text-center">
-                                        <div class="btn-group" role="group">
+                                    <td class="pe-4 py-3 text-center">
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <!-- Approve Button -->
                                             <form asp-action="Approve" method="post" class="d-inline">
-                                                <input type="hidden" name="id" value="@claim.Id" />
-                                                <button type="submit" class="btn btn-success btn-sm" @(isValid ? "" : "disabled")>
-                                                    <i class="fas fa-check me-1"></i>Approve
+                                                <input type="hidden" name="id" value="@item.Id" />
+                                                <button type="submit" class="btn btn-sm btn-success"
+                                                        @(!isValid ? "disabled" : "")
+                                                        title="@(isValid ? "Approve this claim" : "Fix validation issues first")">
+                                                    ✅ Approve
                                                 </button>
                                             </form>
 
-                                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rejectModal-@claim.Id">
-                                                <i class="fas fa-times me-1"></i>Reject
+                                            <!-- Reject Button -->
+                                            <button class="btn btn-sm btn-warning reject-btn"
+                                                    data-claim-id="@item.Id"
+                                                    data-claim-lecturer="@item.LecturerName"
+                                                    data-is-valid="@isValid.ToString().ToLower()"
+                                                    data-validation-errors="@validationResult.ErrorMessage"
+                                                    data-suggested-feedback="@validationResult.SuggestedFeedback"
+                                                    title="Request changes for this claim">
+                                                ✏️ Request Fix
                                             </button>
                                         </div>
                                     </td>
@@ -185,12 +193,155 @@
     </div>
 </div>
 
+<!-- Single Reject Modal (outside the table) -->
+<div class="modal fade" id="rejectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-semibold" style="color: var(--primary-navy);">
+                    ✏️ Request Changes for <span id="modalLecturerName"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="Reject" method="post">
+                <input type="hidden" name="id" id="modalClaimId" />
+                <div class="modal-body">
+                    <!-- Show validation issues if any -->
+                    <div class="alert alert-warning small mb-3" id="validationAlert" style="display: none;">
+                        <strong>Validation Issues Found:</strong>
+                        <div class="mt-1" id="validationErrors"></div>
+                    </div>
+
+                    <label class="form-label fw-semibold">Feedback for Lecturer:</label>
+                    <textarea name="reason" class="form-control" rows="4" id="feedbackTextarea"
+                              placeholder="Please specify what needs to be fixed..."></textarea>
+                    <div class="form-text">This feedback will be sent to the lecturer</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-warning">
+                        📤 Send for Fix
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
-        // Initialize Bootstrap tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
+        // Initialize popovers for validation details
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        });
+
+        // Add confirmation for approve actions
+        document.querySelectorAll('form[asp-action="Approve"]').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                if (!confirm('Are you sure you want to approve this claim? This action cannot be undone.')) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Handle reject button clicks
+        document.querySelectorAll('.reject-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const claimId = this.getAttribute('data-claim-id');
+                const lecturerName = this.getAttribute('data-claim-lecturer');
+                const isValid = this.getAttribute('data-is-valid') === 'true';
+                const validationErrors = this.getAttribute('data-validation-errors');
+                const suggestedFeedback = this.getAttribute('data-suggested-feedback');
+
+                // Set modal content
+                document.getElementById('modalClaimId').value = claimId;
+                document.getElementById('modalLecturerName').textContent = lecturerName;
+
+                // Show/hide validation alert
+                const validationAlert = document.getElementById('validationAlert');
+                const validationErrorsDiv = document.getElementById('validationErrors');
+                const feedbackTextarea = document.getElementById('feedbackTextarea');
+
+                if (!isValid) {
+                    validationAlert.style.display = 'block';
+                    validationErrorsDiv.innerHTML = validationErrors.replace(/<br>/g, '<br>');
+                    feedbackTextarea.value = suggestedFeedback;
+                } else {
+                    validationAlert.style.display = 'none';
+                    feedbackTextarea.value = suggestedFeedback || 'Please review and fix the claim details.';
+                }
+
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('rejectModal'));
+                modal.show();
+            });
+        });
+
+        // Clear modal content when hidden
+        document.getElementById('rejectModal').addEventListener('hidden.bs.modal', function () {
+            document.getElementById('modalClaimId').value = '';
+            document.getElementById('modalLecturerName').textContent = '';
+            document.getElementById('validationAlert').style.display = 'none';
+            document.getElementById('validationErrors').innerHTML = '';
+            document.getElementById('feedbackTextarea').value = '';
+        });
     </script>
+}
+
+@functions {
+    private bool IsClaimValid(ST10395938_POEPart2.Models.LecturerClaim claim)
+    {
+        return GetValidationResult(claim).IsValid;
+    }
+
+    private ValidationResult GetValidationResult(ST10395938_POEPart2.Models.LecturerClaim claim)
+    {
+        var errors = new List<string>();
+        const int MaxMonthlyHours = 180;
+        const decimal MaxHourlyRate = 1000;
+        const decimal MaxTotalAmount = 100000;
+
+        // Hours validation
+        if (claim.HoursWorked <= 0)
+            errors.Add("❌ Hours worked must be greater than 0");
+        else if (claim.HoursWorked > MaxMonthlyHours)
+            errors.Add($"❌ Hours worked ({claim.HoursWorked}) exceeds maximum ({MaxMonthlyHours})");
+
+        // Rate validation
+        if (claim.Rate <= 0)
+            errors.Add("❌ Hourly rate must be greater than 0");
+        else if (claim.Rate > MaxHourlyRate)
+            errors.Add($"❌ Hourly rate (R{claim.Rate}) exceeds maximum (R{MaxHourlyRate})");
+
+        // Amount validation
+        decimal correctAmount = claim.HoursWorked * claim.Rate;
+        if (claim.Amount != correctAmount)
+            errors.Add($"❌ Calculated amount mismatch (R{claim.Amount} vs R{correctAmount})");
+
+        if (claim.Amount > MaxTotalAmount)
+            errors.Add($"❌ Total amount (R{claim.Amount}) exceeds maximum (R{MaxTotalAmount})");
+
+        // Evidence validation
+        if (string.IsNullOrEmpty(claim.EvidenceFile))
+            errors.Add("❌ No evidence file uploaded");
+
+        return new ValidationResult
+        {
+            IsValid = errors.Count == 0,
+            ErrorMessage = string.Join("<br>", errors),
+            IssuesCount = errors.Count,
+            SuggestedFeedback = errors.Count > 0 ? string.Join("\n", errors.Select(e => e.Replace("❌", "•"))) : "Please review and fix the claim details."
+        };
+    }
+
+    private class ValidationResult
+    {
+        public bool IsValid { get; set; }
+        public string ErrorMessage { get; set; } = string.Empty;
+        public int IssuesCount { get; set; }
+        public string SuggestedFeedback { get; set; } = string.Empty;
+    }
 }

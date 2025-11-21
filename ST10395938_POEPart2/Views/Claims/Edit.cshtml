@@ -3,82 +3,96 @@
     ViewData["Title"] = "Edit Claim";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-transparent border-0 pt-4 text-center">
-                    <span class="badge bg-warning mb-3 px-3 py-2">
-                        <i class="fas fa-exclamation-triangle me-2"></i>Needs Fix
-                    </span>
-                    <h2 class="mb-0 fw-semibold">Edit Claim</h2>
-                    <p class="text-muted mt-2">Update the claim details as requested</p>
-                </div>
-                <div class="card-body p-4">
-                    <!-- Feedback -->
-                    @if (!string.IsNullOrEmpty(Model.ReviewNote))
-                    {
-                        <div class="alert alert-info rounded-3 mb-4 border-0">
-                            <i class="fas fa-comment-dots me-2"></i>@Model.ReviewNote
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-transparent border-0 pt-4 pb-2">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <div style="width: 50px; height: 50px; background: var(--accent-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-size: 1.25rem;">✏️</span>
                         </div>
-                    }
+                    </div>
+                    <div>
+                        <span class="badge rounded-pill px-3 py-2 mb-2" style="background: rgba(217, 119, 6, 0.15); color: var(--accent-gold); border: 1px solid var(--accent-gold);">
+                            Needs Fix
+                        </span>
+                        <h2 class="fw-bold mb-1" style="color: var(--primary-navy);">Edit Claim</h2>
+                        <p class="text-muted mb-0">Update the claim details as requested</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <!-- Feedback -->
+                @if (!string.IsNullOrEmpty(Model.ReviewNote))
+                {
+                    <div class="alert alert-info rounded-3 mb-4 border-0" style="background: rgba(13, 148, 136, 0.1); color: var(--accent-teal); border-left: 4px solid var(--accent-teal);">
+                        <div class="fw-semibold mb-1">📝 Coordinator Feedback:</div>
+                        @Model.ReviewNote
+                    </div>
+                }
 
-                    <form asp-action="Edit" enctype="multipart/form-data" method="post">
-                        <input type="hidden" asp-for="Id" />
+                <form asp-action="Edit" enctype="multipart/form-data" method="post">
+                    <input type="hidden" asp-for="Id" />
 
-                        <!-- Lecturer Name -->
-                        <div class="mb-4">
-                            <label asp-for="LecturerName" class="form-label fw-semibold"></label>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="LecturerName" class="form-label fw-semibold" style="color: var(--text-primary);">Lecturer Name</label>
                             <input asp-for="LecturerName" class="form-control" readonly />
                         </div>
 
-                        <!-- Hours Worked -->
-                        <div class="mb-4">
-                            <label asp-for="HoursWorked" class="form-label fw-semibold"></label>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="HoursWorked" class="form-label fw-semibold" style="color: var(--text-primary);">Hours Worked</label>
                             <input asp-for="HoursWorked" class="form-control" type="number" step="0.01" id="hoursWorked" max="180" />
                             <span asp-validation-for="HoursWorked" class="text-danger small mt-1"></span>
                         </div>
+                    </div>
 
-                        <!-- Rate -->
-                        <div class="mb-4">
-                            <label asp-for="Rate" class="form-label fw-semibold"></label>
-                            <input asp-for="Rate" class="form-control" readonly id="rate" />
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Rate" class="form-label fw-semibold" style="color: var(--text-primary);">Hourly Rate</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background: var(--background-light); color: var(--text-secondary);">R</span>
+                                <input asp-for="Rate" class="form-control" readonly id="rate" />
+                            </div>
                         </div>
 
-                        <!-- Amount -->
-                        <div class="mb-4">
-                            <label asp-for="Amount" class="form-label fw-semibold">Amount</label>
-                            <input asp-for="Amount" class="form-control" readonly id="amount" />
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold" style="color: var(--text-primary);">Total Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background: var(--background-light); color: var(--text-secondary);">R</span>
+                                <input class="form-control" readonly id="amount" style="background: var(--background-light); color: var(--accent-teal); font-weight: 600;" />
+                            </div>
                         </div>
+                    </div>
 
-                        <!-- Note -->
-                        <div class="mb-4">
-                            <label asp-for="Note" class="form-label fw-semibold"></label>
-                            <textarea asp-for="Note" class="form-control" rows="4"></textarea>
-                        </div>
+                    <div class="mb-3">
+                        <label asp-for="Note" class="form-label fw-semibold" style="color: var(--text-primary);">Notes & Description</label>
+                        <textarea asp-for="Note" class="form-control" rows="4" placeholder="Update your notes or description..."></textarea>
+                    </div>
 
-                        <!-- Evidence -->
-                        <div class="mb-4">
-                            <label for="evidence" class="form-label fw-semibold">Replace Evidence (optional)</label>
-                            <input type="file" name="evidence" class="form-control" />
-                            @if (!string.IsNullOrEmpty(Model.EvidenceFile))
-                            {
-                                <a href="~/uploads/@Model.EvidenceFile" target="_blank" class="btn btn-sm btn-outline-primary mt-2">
-                                    <i class="fas fa-eye me-1"></i>View Current File
+                    <div class="mb-4">
+                        <label for="evidence" class="form-label fw-semibold" style="color: var(--text-primary);">📎 Replace Evidence (Optional)</label>
+                        <input type="file" name="evidence" class="form-control" />
+                        @if (!string.IsNullOrEmpty(Model.EvidenceFile))
+                        {
+                            <div class="mt-2">
+                                <a href="~/uploads/@Model.EvidenceFile" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    View Current File
                                 </a>
-                            }
-                        </div>
+                            </div>
+                        }
+                    </div>
 
-                        <div class="text-center mt-4 pt-3">
-                            <button type="submit" class="btn btn-primary btn-lg px-5 me-3">
-                                <i class="fas fa-check-circle me-2"></i>Update Claim
-                            </button>
-                            <a asp-action="MyClaims" class="btn btn-outline-secondary btn-lg px-5">
-                                <i class="fas fa-times me-2"></i>Cancel
-                            </a>
-                        </div>
-                    </form>
-                </div>
+                    <div class="d-flex gap-2 mt-4 pt-2">
+                        <button type="submit" class="btn btn-primary flex-fill py-2 fw-semibold">
+                            Update Claim
+                        </button>
+                        <a asp-action="MyClaims" class="btn btn-outline-secondary py-2">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

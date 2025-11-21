@@ -172,8 +172,8 @@ namespace ST10395938_POEPart2.Controllers
                             table.Cell().Text(c.Id.ToString());
                             table.Cell().Text(c.LecturerName);
                             table.Cell().Text(c.HoursWorked.ToString("F2"));
-                            table.Cell().Text(c.Rate.ToString("C2"));
-                            table.Cell().Text(c.Amount.ToString("C2"));
+                            table.Cell().Text($"R {c.Rate:N2}");
+                            table.Cell().Text($"R {c.Amount:N2}");
                             table.Cell().Text(c.Status);
                             table.Cell().Text(c.ReviewedBy ?? "N/A");
                         }
@@ -184,9 +184,6 @@ namespace ST10395938_POEPart2.Controllers
             var pdfBytes = pdf.GeneratePdf();
             return File(pdfBytes, "application/pdf", "LecturerClaimsReport.pdf");
         }
-
-
-
 
     }
 }

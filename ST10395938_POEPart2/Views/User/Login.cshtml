@@ -4,62 +4,113 @@
 }
 
 <div class="row justify-content-center">
+    <!-- Login Form Column -->
     <div class="col-md-6 col-lg-5">
         <div class="card shadow">
             <div class="card-body p-5">
-                <h2 class="text-center mb-4" style="color: #0d6efd;">Welcome Back</h2>
-                <p class="text-center text-muted mb-4">Sign in to your account to continue</p>
+                <!-- Header Section -->
+                <div class="text-center mb-4">
+                    <div class="mb-3">
+                        <div style="width: 60px; height: 60px; background: var(--primary-navy); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-size: 1.5rem;">🔐</span>
+                        </div>
+                    </div>
+                    <h2 class="fw-bold" style="color: var(--primary-navy); margin-bottom: 0.5rem;">Welcome Back</h2>
+                    <p class="text-muted">Sign in to your account</p>
+                </div>
 
                 <form asp-action="Login" method="post">
                     <div class="mb-3">
-                        <label asp-for="Email" class="form-label fw-semibold"></label>
-                        <input asp-for="Email" class="form-control form-control-lg" placeholder="Enter your email" />
-                        <span asp-validation-for="Email" class="text-danger small"></span>
+                        <label asp-for="Email" class="form-label fw-semibold" style="color: var(--text-primary);">Email Address</label>
+                        <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                        <span asp-validation-for="Email" class="text-danger small mt-1"></span>
                     </div>
 
                     <div class="mb-4">
-                        <label asp-for="Password" class="form-label fw-semibold"></label>
-                        <input asp-for="Password" type="password" class="form-control form-control-lg" placeholder="Enter your password" />
-                        <span asp-validation-for="Password" class="text-danger small"></span>
+                        <label asp-for="Password" class="form-label fw-semibold" style="color: var(--text-primary);">Password</label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
+                        <span asp-validation-for="Password" class="text-danger small mt-1"></span>
                     </div>
 
-                    <div class="mb-4">
-                        <div class="form-check">
-                            <input asp-for="RememberMe" class="form-check-input" />
-                            <label asp-for="RememberMe" class="form-check-label">Remember me</label>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold" style="font-size: 1.1rem;">
-                        Sign In
+                    <button type="submit" class="btn btn-primary w-100 py-3 fw-semibold" style="font-size: 1.1rem;">
+                        Sign In to Portal
                     </button>
                 </form>
 
                 @if (!ViewData.ModelState.IsValid)
                 {
-                    <div class="alert alert-danger mt-4" role="alert">
-                        <h6 class="alert-heading">Please fix the following errors:</h6>
+                    <div class="alert alert-danger mt-4" role="alert" style="border-radius: 8px;">
+                        <h6 class="alert-heading fw-semibold" style="color: #991b1b;">Please fix the following errors:</h6>
                         <div asp-validation-summary="All" class="mb-0 small"></div>
                     </div>
                 }
             </div>
         </div>
+    </div>
 
-        <!-- Side note with default logins -->
-        <div class="card mt-4 shadow-sm">
-            <div class="card-body">
-                <h6 class="fw-semibold">Default Login Credentials (for testing)</h6>
-                <ul class="small mb-0">
-                    <li><strong>HR:</strong> Email: hr@example.com | Password: Password123!</li>
-                    <li><strong>Lecturer:</strong> Email: lecturer@example.com | Password: Password123!</li>
-                    <li><strong>Coordinator:</strong> Email: coordinator@example.com | Password: Password123!</li>
-                    <li><strong>Manager:</strong> Email: manager@example.com | Password: Password123!</li>
-                </ul>
+    <!-- Test Credentials Column -->
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-transparent border-0 pb-2">
+                <h5 class="fw-bold mb-1" style="color: var(--primary-navy);"> Test Credentials</h5>
+                <p class="small text-muted mb-0">Use these accounts to explore different roles</p>
             </div>
-        </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="p-3 rounded" style="background: rgba(13, 148, 136, 0.1); border-left: 4px solid var(--accent-teal);">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="fw-bold me-2" style="color: var(--accent-teal);">HR Administrator</span>
+                                <span class="badge rounded-pill" style="background: var(--accent-teal); color: white; font-size: 0.7rem;">FULL ACCESS</span>
+                            </div>
+                            <div class="small" style="color: var(--text-secondary);">
+                                <div><strong>Email:</strong> hr@example.com</div>
+                                <div><strong>Password:</strong> Password123!</div>
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="text-center mt-4">
-            <p class="text-muted">Don't have an account? <a href="#" class="text-decoration-none" style="color: #0d6efd;">Contact administrator</a></p>
+                    <div class="col-12">
+                        <div class="p-3 rounded" style="background: rgba(30, 58, 138, 0.1); border-left: 4px solid var(--primary-navy);">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="fw-bold me-2" style="color: var(--primary-navy);">Lecturer</span>
+                                <span class="badge rounded-pill" style="background: var(--primary-navy); color: white; font-size: 0.7rem;">CLAIMS</span>
+                            </div>
+                            <div class="small" style="color: var(--text-secondary);">
+                                <div><strong>Email:</strong> lecturer@example.com</div>
+                                <div><strong>Password:</strong> Password123!</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="p-3 rounded" style="background: rgba(217, 119, 6, 0.1); border-left: 4px solid var(--accent-gold);">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="fw-bold me-2" style="color: var(--accent-gold);">Coordinator</span>
+                                <span class="badge rounded-pill" style="background: var(--accent-gold); color: white; font-size: 0.7rem;">APPROVER</span>
+                            </div>
+                            <div class="small" style="color: var(--text-secondary);">
+                                <div><strong>Email:</strong> coordinator@example.com</div>
+                                <div><strong>Password:</strong> Password123!</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="p-3 rounded" style="background: rgba(107, 114, 128, 0.1); border-left: 4px solid var(--secondary-gray);">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="fw-bold me-2" style="color: var(--secondary-gray);">Manager</span>
+                                <span class="badge rounded-pill" style="background: var(--secondary-gray); color: white; font-size: 0.7rem;">FINAL APPROVER</span>
+                            </div>
+                            <div class="small" style="color: var(--text-secondary);">
+                                <div><strong>Email:</strong> manager@example.com</div>
+                                <div><strong>Password:</strong> Password123!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>

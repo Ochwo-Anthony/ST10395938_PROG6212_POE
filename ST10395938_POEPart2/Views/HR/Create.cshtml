@@ -3,56 +3,87 @@
     ViewData["Title"] = "Add New User";
 }
 
-<h2>Add New User</h2>
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-transparent border-0 pt-4 pb-2">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <div style="width: 50px; height: 50px; background: var(--accent-teal); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-size: 1.25rem;">👤</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="fw-bold mb-1" style="color: var(--primary-navy);">Add New User</h2>
+                        <p class="text-muted mb-0">Create a new user account in the system</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="FirstName" class="form-label fw-semibold" style="color: var(--text-primary);">First Name</label>
+                            <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
+                            <span asp-validation-for="FirstName" class="text-danger small mt-1"></span>
+                        </div>
 
-<form asp-action="Create" method="post">
-    <div class="mb-3">
-        <label asp-for="FirstName" class="form-label"></label>
-        <input asp-for="FirstName" class="form-control" />
-        <span asp-validation-for="FirstName" class="text-danger"></span>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="LastName" class="form-label fw-semibold" style="color: var(--text-primary);">Last Name</label>
+                            <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+                            <span asp-validation-for="LastName" class="text-danger small mt-1"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label fw-semibold" style="color: var(--text-primary);">Email Address</label>
+                        <input asp-for="Email" class="form-control" placeholder="Enter email address" />
+                        <span asp-validation-for="Email" class="text-danger small mt-1"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label fw-semibold" style="color: var(--text-primary);">Password</label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
+                        <span asp-validation-for="Password" class="text-danger small mt-1"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Role" class="form-label fw-semibold" style="color: var(--text-primary);">Role</label>
+                            <select asp-for="Role" class="form-select">
+                                <option value="">-- Select Role --</option>
+                                <option value="HR">HR Administrator</option>
+                                <option value="Lecturer">Lecturer</option>
+                                <option value="Coordinator">Coordinator</option>
+                                <option value="Manager">Manager</option>
+                            </select>
+                            <span asp-validation-for="Role" class="text-danger small mt-1"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="HourlyRate" class="form-label fw-semibold" style="color: var(--text-primary);">Hourly Rate</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background: var(--background-light); color: var(--text-secondary);">R</span>
+                                <input asp-for="HourlyRate" class="form-control" placeholder="0.00" />
+                            </div>
+                            <span asp-validation-for="HourlyRate" class="text-danger small mt-1"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-accent flex-fill py-2 fw-semibold">
+                            Create User
+                        </button>
+                        <a class="btn btn-outline-secondary py-2" asp-action="Index">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <div class="mb-3">
-        <label asp-for="LastName" class="form-label"></label>
-        <input asp-for="LastName" class="form-control" />
-        <span asp-validation-for="LastName" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Password" class="form-label"></label>
-        <input asp-for="Password" type="password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Role" class="form-label"></label>
-        <select asp-for="Role" class="form-select">
-            <option value="">-- Select Role --</option>
-            <option value="HR">HR</option>
-            <option value="Lecturer">Lecturer</option>
-            <option value="Coordinator">Coordinator</option>
-            <option value="Manager">Manager</option>
-        </select>
-        <span asp-validation-for="Role" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="HourlyRate" class="form-label"></label>
-        <input asp-for="HourlyRate" class="form-control" />
-        <span asp-validation-for="HourlyRate" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success">Create User</button>
-    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-

@@ -11,7 +11,7 @@ namespace ST10395938_POEPart2.Controllers
     {
         private readonly ApplicationDbContext _db;
 
-        // Validation constants
+        // Validation limits
         private const int MaxMonthlyHours = 180;
         private const decimal MaxHourlyRate = 1000;
         private const decimal MaxTotalAmount = 100000;
@@ -21,90 +21,113 @@ namespace ST10395938_POEPart2.Controllers
             _db = db;
         }
 
+        // -------------------------------------------------------
+        // INDEX - List all pending claims + search
+        // -------------------------------------------------------
         public async Task<IActionResult> Index(string? lecturerName)
         {
-            var q = _db.LecturerClaims
-                .AsNoTracking()
-                .Where(x => x.Status == "Pending");
+            var query = _db.LecturerClaims
+                .Where(x => x.Status == "Pending")
+                .AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(lecturerName))
             {
-                var term = lecturerName.Trim();
-                q = q.Where(x => EF.Functions.Like(x.LecturerName, $"%{term}%"));
+                var name = lecturerName.Trim();
+                query = query.Where(x =>
+                    EF.Functions.Like(x.LecturerName, $"%{name}%"));
             }
 
-            var list = await q.OrderBy(x => x.CreateAt).ToListAsync();
             ViewBag.LecturerName = lecturerName ?? "";
+            var list = await query.OrderBy(x => x.CreateAt).ToListAsync();
             return View(list);
         }
 
+        // -------------------------------------------------------
+        // APPROVE CLAIM
+        // -------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> Approve(int id)
         {
-            var row = await _db.LecturerClaims.FindAsync(id);
-            if (row == null) return NotFound();
+            var claim = await _db.LecturerClaims.FindAsync(id);
+            if (claim == null)
+                return NotFound();
 
-            // Validate claim before approving
-            if (!ValidateClaim(row, out string reason))
+            // Validate before approving
+            if (!ValidateClaim(claim, out string errorMessage))
             {
-                TempData["Message"] = $"Claim cannot be approved: {reason}";
+                TempData["Message"] = $"Claim cannot be approved: {errorMessage}";
                 return RedirectToAction(nameof(Index));
             }
 
-            row.Status = "Coordinator Approved";
-            row.ReviewNote = null;
+            claim.Status = "Coordinator Approved";
+            claim.ReviewNote = null;
+            claim.ReviewedBy = "Coordinator";
+            claim.ReviewedAt = DateTime.UtcNow;
 
             await _db.SaveChangesAsync();
             TempData["Message"] = "Claim approved successfully.";
             return RedirectToAction(nameof(Index));
         }
 
+        // -------------------------------------------------------
+        // REJECT CLAIM
+        // -------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> Reject(int id, string reason)
         {
-            var row = await _db.LecturerClaims.FindAsync(id);
-            if (row == null) return NotFound();
+            var claim = await _db.LecturerClaims.FindAsync(id);
+            if (claim == null)
+                return NotFound();
 
-            row.Status = "Needs Fix";
-            row.ReviewNote = string.IsNullOrWhiteSpace(reason) ? "Please fix and resubmit" : reason.Trim();
-            row.ReviewedBy = "Coordinator";
-            row.ReviewedAt = DateTime.UtcNow;
+            claim.Status = "Needs Fix";
+            claim.ReviewedBy = "Coordinator";
+            claim.ReviewedAt = DateTime.UtcNow;
+            claim.ReviewNote = string.IsNullOrWhiteSpace(reason)
+                ? "Please fix and resubmit"
+                : reason.Trim();
 
             await _db.SaveChangesAsync();
+
             TempData["Message"] = "Claim rejected.";
             return RedirectToAction(nameof(Index));
         }
 
-        // Validation method
-        private bool ValidateClaim(LecturerClaim claim, out string reason)
+        // -------------------------------------------------------
+        // VALIDATION METHOD
+        // -------------------------------------------------------
+        private bool ValidateClaim(LecturerClaim claim, out string message)
         {
-            reason = string.Empty;
+            message = string.Empty;
 
+            // Hours validation
             if (claim.HoursWorked <= 0 || claim.HoursWorked > MaxMonthlyHours)
             {
-                reason = $"Hours worked ({claim.HoursWorked}) exceed the maximum allowed per month ({MaxMonthlyHours}).";
+                message = $"Hours worked ({claim.HoursWorked}) exceed the maximum allowed ({MaxMonthlyHours}).";
                 return false;
             }
 
+            // Rate validation
             if (claim.Rate <= 0 || claim.Rate > MaxHourlyRate)
             {
-                reason = $"Hourly rate ({claim.Rate:C}) exceeds maximum allowed ({MaxHourlyRate:C}).";
+                message = $"Hourly rate (R{claim.Rate}) exceeds maximum allowed (R{MaxHourlyRate}).";
                 return false;
             }
 
-            if (claim.Amount != claim.HoursWorked * claim.Rate)
+            // Amount validation
+            decimal correctAmount = claim.HoursWorked * claim.Rate;
+            if (claim.Amount != correctAmount)
             {
-                reason = $"Claim total ({claim.Amount:C}) does not match hours worked * hourly rate.";
+                message = $"Claim total (R{claim.Amount}) does not match hours worked × rate (R{correctAmount}).";
                 return false;
             }
 
             if (claim.Amount > MaxTotalAmount)
             {
-                reason = $"Claim total ({claim.Amount:C}) exceeds maximum allowed ({MaxTotalAmount:C}).";
+                message = $"Claim total (R{claim.Amount}) exceeds maximum allowed (R{MaxTotalAmount}).";
                 return false;
             }
 
-            return true; // All validations passed
+            return true;
         }
     }
 }

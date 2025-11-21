@@ -3,88 +3,108 @@
 }
 
 <div class="container mt-5">
-    <h1 class="text-center mb-5" style="font-weight: 600;">
-        Welcome to Contract Monthly Claim
-        System (CMCS)
-    </h1>
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <div class="mb-4">
+            <div style="width: 80px; height: 80px; background: var(--primary-navy); border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                <span style="color: white; font-size: 2rem;">🏢</span>
+            </div>
+        </div>
+        <h1 class="fw-bold mb-3" style="color: var(--primary-navy); font-size: 2.5rem;">
+            Welcome to CMCS
+        </h1>
+        <p class="lead text-muted mx-auto" style="max-width: 600px; font-size: 1.2rem;">
+            Contract Monthly Claim System 
+        </p>
+    </div>
 
+    <!-- Role Cards -->
     <div class="row justify-content-center g-4">
         <!-- Lecturer Card -->
         <div class="col-md-4">
-            <div class="card role-card lecturer-card shadow-sm h-100 text-center p-4 border-0">
-                <div class="role-icon mb-3">
-                    <img src="~/images/lecturer.jpg" alt="Lecturer" class="img-fluid rounded" style="width:260px;height:160px;">
+            <div class="card role-card shadow-sm border-0 h-100">
+                <div class="card-body text-center p-4">
+                    <div class="role-icon mb-4">
+                        <div style="width: 80px; height: 80px; background: rgba(30, 58, 138, 0.1); border-radius: 16px; display: inline-flex; align-items: center; justify-content: center;">
+                            <span style="color: var(--primary-navy); font-size: 2rem;">👨‍🏫</span>
+                        </div>
+                    </div>
+                    <h4 class="fw-bold mb-3" style="color: var(--primary-navy);">Lecturer Portal</h4>
+                    <p class="text-muted mb-4" style="line-height: 1.6;">
+                        Submit and track your claims
+                    </p>
+                    <a asp-controller="Claims" asp-action="Index" class="btn role-btn lecturer-btn w-100 py-3 fw-semibold">
+                        Enter Lecturer Portal
+                    </a>
                 </div>
-                <h5 class="card-title mb-3" style="font-weight: 600;">Lecturer</h5>
-                <p class="card-text text-muted mb-4">Submit and view your claims, check status and payment details.</p>
-                <a asp-controller="Claims" asp-action="Index" class="btn role-btn lecturer-btn btn-lg w-100">Go to Lecturer Portal</a>
             </div>
         </div>
 
         <!-- Coordinator Card -->
         <div class="col-md-4">
-            <div class="card role-card coordinator-card shadow-sm h-100 text-center p-4 border-0">
-                <div class="role-icon mb-3">
-                    <img src="~/images/coordinator.jpg" alt="Coordinator" class="img-fluid rounded" style="width:260px;height:160px">
+            <div class="card role-card shadow-sm border-0 h-100">
+                <div class="card-body text-center p-4">
+                    <div class="role-icon mb-4">
+                        <div style="width: 80px; height: 80px; background: rgba(217, 119, 6, 0.1); border-radius: 16px; display: inline-flex; align-items: center; justify-content: center;">
+                            <span style="color: var(--accent-gold); font-size: 2rem;">📋</span>
+                        </div>
+                    </div>
+                    <h4 class="fw-bold mb-3" style="color: var(--primary-navy);">Coordinator Portal</h4>
+                    <p class="text-muted mb-4" style="line-height: 1.6;">
+                        Review pending claims
+                    </p>
+                    <a asp-controller="Coordinator" asp-action="Index" class="btn role-btn coordinator-btn w-100 py-3 fw-semibold">
+                        Enter Coordinator Portal
+                    </a>
                 </div>
-                <h5 class="card-title mb-3" style="font-weight: 600;">Coordinator</h5>
-                <p class="card-text text-muted mb-4">Review pending claims submitted by lecturers and approve or reject.</p>
-                <a asp-controller="Coordinator" asp-action="Index" class="btn role-btn coordinator-btn btn-lg w-100">Go to Coordinator Portal</a>
             </div>
         </div>
 
         <!-- Manager Card -->
         <div class="col-md-4">
-            <div class="card role-card manager-card shadow-sm h-100 text-center p-4 border-0">
-                <div class="role-icon mb-3">
-                    <img src="~/images/manager.jpg" alt="Manager" class="img-fluid rounded" style="width:260px;height:160px">
+            <div class="card role-card shadow-sm border-0 h-100">
+                <div class="card-body text-center p-4">
+                    <div class="role-icon mb-4">
+                        <div style="width: 80px; height: 80px; background: rgba(13, 148, 136, 0.1); border-radius: 16px; display: inline-flex; align-items: center; justify-content: center;">
+                            <span style="color: var(--accent-teal); font-size: 2rem;">👔</span>
+                        </div>
+                    </div>
+                    <h4 class="fw-bold mb-3" style="color: var(--primary-navy);">Manager Portal</h4>
+                    <p class="text-muted mb-4" style="line-height: 1.6;">
+                        Final approval of claims
+                    </p>
+                    <a asp-controller="Manager" asp-action="Index" class="btn role-btn manager-btn w-100 py-3 fw-semibold">
+                        Enter Manager Portal
+                    </a>
                 </div>
-                <h5 class="card-title mb-3" style="font-weight: 600;">Manager</h5>
-                <p class="card-text text-muted mb-4">Approve claims that have been approved by coordinators and manage payments.</p>
-                <a asp-controller="Manager" asp-action="Index" class="btn role-btn manager-btn btn-lg w-100">Go to Manager Portal</a>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    /* Card styling */
-    .role-card {
-        border-radius: 1rem;
-        background: white;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border: none;
+    .mt-6 {
+        margin-top: 4rem !important;
     }
 
-        /* Card hover effects */
+    /* Card Styling */
+    .role-card {
+        border-radius: 16px;
+        background: white;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+
         .role-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+            box-shadow: 0 12px 40px rgba(30, 58, 138, 0.15) !important;
         }
 
-    /* Lecturer Card Hover */
-    .lecturer-card:hover {
-        background: linear-gradient(135deg, rgba(13, 110, 253, 0.05) 0%, rgba(13, 202, 240, 0.05) 100%);
-    }
-
-    /* Coordinator Card Hover */
-    .coordinator-card:hover {
-        background: linear-gradient(135deg, rgba(25, 135, 84, 0.05) 0%, rgba(32, 201, 151, 0.05) 100%);
-    }
-
-    /* Manager Card Hover */
-    .manager-card:hover {
-        background: linear-gradient(135deg, rgba(220, 53, 69, 0.05) 0%, rgba(253, 126, 20, 0.05) 100%);
-    }
-
-    /* Button styling */
+    /* Button Styling */
     .role-btn {
-        background: linear-gradient(90deg, #0d6efd, #0dcaf0);
         border: none;
-        color: white;
+        border-radius: 12px;
         font-weight: 600;
-        padding: 12px 24px;
-        border-radius: 0.75rem;
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
@@ -105,64 +125,76 @@
             left: 100%;
         }
 
+        .role-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
     .lecturer-btn {
-        background: linear-gradient(90deg, #0d6efd, #0dcaf0);
+        background: var(--primary-navy);
+        color: white;
     }
 
         .lecturer-btn:hover {
-            background: linear-gradient(90deg, #0dcaf0, #0d6efd);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+            background: var(--primary-navy-dark);
+            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.3);
         }
 
     .coordinator-btn {
-        background: linear-gradient(90deg, #198754, #20c997);
+        background: var(--accent-gold);
+        color: white;
     }
 
         .coordinator-btn:hover {
-            background: linear-gradient(90deg, #20c997, #198754);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
+            background: #b45309;
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.3);
         }
 
     .manager-btn {
-        background: linear-gradient(90deg, #dc3545, #fd7e14);
+        background: var(--accent-teal);
+        color: white;
     }
 
         .manager-btn:hover {
-            background: linear-gradient(90deg, #fd7e14, #dc3545);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+            background: var(--accent-teal-dark);
+            box-shadow: 0 6px 20px rgba(13, 148, 136, 0.3);
         }
 
-    /* Role icons */
+    /* Role Icons */
     .role-icon {
-        margin-bottom: 20px;
+        transition: transform 0.3s ease;
     }
 
-        .role-icon img {
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-    .role-card:hover .role-icon img {
-        transform: scale(1.05);
+    .role-card:hover .role-icon {
+        transform: scale(1.1);
     }
 
-    /* Responsive adjustments */
+    /* Responsive Design */
     @@media (max-width: 768px) {
         .container {
-            padding: 0 15px;
+            padding: 0 1rem;
         }
 
         .role-card {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
 
         .role-btn {
-            padding: 10px 20px;
-            font-size: 0.9rem;
+            padding: 0.75rem 1.5rem;
+        }
+
+        h1 {
+            font-size: 2rem !important;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .mt-5 {
+            margin-top: 2rem !important;
+        }
+
+        .mt-6 {
+            margin-top: 3rem !important;
         }
     }
 </style>
