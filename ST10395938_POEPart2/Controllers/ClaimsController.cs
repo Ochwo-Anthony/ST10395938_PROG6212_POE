@@ -35,9 +35,9 @@ namespace ST10395938_POEPart2.Controllers
                 .Take(5)
                 .ToListAsync();
 
-            // Pass user info via ViewBag (for profile display)
+           
             ViewBag.LecturerFullName = $"{user.FirstName} {user.LastName}";
-            ViewBag.ProfileImage = "/images/placeholder.jpg"; // placeholder for now
+            ViewBag.ProfileImage = "/images/placeholder.jpg"; 
 
             return View(claims);
         }

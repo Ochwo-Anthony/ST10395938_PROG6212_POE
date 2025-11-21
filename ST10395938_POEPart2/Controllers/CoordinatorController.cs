@@ -21,9 +21,7 @@ namespace ST10395938_POEPart2.Controllers
             _db = db;
         }
 
-        // -------------------------------------------------------
-        // INDEX - List all pending claims + search
-        // -------------------------------------------------------
+       
         public async Task<IActionResult> Index(string? lecturerName)
         {
             var query = _db.LecturerClaims
@@ -42,9 +40,7 @@ namespace ST10395938_POEPart2.Controllers
             return View(list);
         }
 
-        // -------------------------------------------------------
-        // APPROVE CLAIM
-        // -------------------------------------------------------
+
         [HttpPost]
         public async Task<IActionResult> Approve(int id)
         {
@@ -69,9 +65,7 @@ namespace ST10395938_POEPart2.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // -------------------------------------------------------
-        // REJECT CLAIM
-        // -------------------------------------------------------
+
         [HttpPost]
         public async Task<IActionResult> Reject(int id, string reason)
         {
@@ -92,9 +86,7 @@ namespace ST10395938_POEPart2.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // -------------------------------------------------------
-        // VALIDATION METHOD
-        // -------------------------------------------------------
+
         private bool ValidateClaim(LecturerClaim claim, out string message)
         {
             message = string.Empty;

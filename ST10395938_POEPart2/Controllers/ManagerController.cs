@@ -11,10 +11,10 @@ namespace ST10395938_POEPart2.Controllers
     {
         private readonly ApplicationDbContext _db;
 
-        // Policy constants
-        private const int MaxMonthlyHours = 180;       // max hours per month
-        private const decimal MaxHourlyRate = 400;     // max allowed hourly rate
-        private const decimal MaxTotalAmount = 100000; // max allowed total claim
+       
+        private const int MaxMonthlyHours = 180;       
+        private const decimal MaxHourlyRate = 400;    
+        private const decimal MaxTotalAmount = 100000;
 
         public ManagerController(ApplicationDbContext db)
         {
@@ -115,9 +115,9 @@ namespace ST10395938_POEPart2.Controllers
                 return false;
             }
 
-            // Additional policy checks can go here, e.g., duplicate claims, missing evidence, etc.
+            
 
-            return true; // All checks passed
+            return true; 
         }
     }
 }
